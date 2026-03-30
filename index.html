@@ -205,7 +205,7 @@ async function loadAll() {
   render();
 }
 sb.channel('onboarding-changes')
-  .on('postgres_changes', { event: '*', schema: 'public', table: 'franchisees' }, () => loadAll())
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'franchisees' }, () => { if (!_savingNotes) loadAll(); })
   .on('postgres_changes', { event: '*', schema: 'public', table: 'franchisee_steps' }, () => loadAll())
   .on('postgres_changes', { event: '*', schema: 'public', table: 'checklist_steps' }, () => loadAll())
   .subscribe();
@@ -215,6 +215,8 @@ function pct(fid) {
   return steps.length ? Math.round(done / steps.length * 100) : 0;
 }
 function render() {
+  if (document.activeElement && document.activeElement.classList.contains("notes-box")) return;
+
   const g = document.getElementById('grid');
   g.innerHTML = franchisees.map(f => {
     const p = pct(f.id);
@@ -236,7 +238,7 @@ function render() {
       </div>
       <div class="tracker-bar"><div class="tracker-fill" style="width:${p}%"></div></div>
       <div class="steps">${stepsHtml}</div>
-      <div class="notes-section"><div style="display:flex;align-items:center;"><span class="notes-label">Notes</span><span class="notes-saved" id="saved-${f.id}">Saved &#10003;</span></div><textarea class="notes-box" placeholder="Add notes..." onchange="saveNotes('${f.id}',this.value)" onfocus="this.style.minHeight='80px'" onblur="this.style.minHeight='50px'">${f.notes||''}</textarea></div><div class="tracker-foot">
+      <div class="notes-section"><div style="display:flex;align-items:center;"><span class="notes-label">Notes</span><span class="notes-saved" id="saved-${f.id}">Saved &#10003;</span></div><textarea class="notes-box" placeholder="Add notes..." oninput="debounceSaveNotes('${f.id}',this.value)" onchange="saveNotes('${f.id}',this.value)" onfocus="this.style.minHeight='80px'" onblur="this.style.minHeight='50px'">${f.notes||''}</textarea></div><div class="tracker-foot">
         <span>${doneCount} of ${steps.length} complete</span>
         <button class="remove-btn" onclick="removeFranchisee('${f.id}')">Remove</button>
       </div>
@@ -268,10 +270,21 @@ async function doAdd() {
   document.getElementById('addBtn').textContent = 'Add';
   closeAdd();
   await 
+let _noteTimers = {};
+let _savingNotes = false;
+function debounceSaveNotes(fid, notes) {
+  clearTimeout(_noteTimers[fid]);
+  _noteTimers[fid] = setTimeout(() => saveNotes(fid, notes), 1500);
+}
 async function saveNotes(fid, notes) {
+  _savingNotes = true;
   await sb.from('franchisees').update({ notes }).eq('id', fid);
+  // Update local data without re-rendering
+  const f = franchisees.find(x => x.id === fid);
+  if (f) f.notes = notes;
   const el = document.getElementById('saved-' + fid);
   if (el) { el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 2000); }
+  setTimeout(() => { _savingNotes = false; }, 500);
 }
 loadAll();
 }
@@ -329,6 +342,6 @@ async function addNewStep() {
 }
 loadAll();
 </script>
-<div class="unicorn-scene"><div class="unicorn-walk"><div class="u-body"><div class="u-torso"></div><div class="u-head"><div class="u-eye"></div></div><div class="u-horn"></div><div class="u-mane"></div><div class="u-tail"></div><div class="u-leg fl"></div><div class="u-leg fr"></div><div class="u-leg bl"></div><div class="u-leg br"></div></div></div><div class="rainbow-poop p1"><div class="rp-icon">Ã°ÂÂÂÃ°ÂÂÂ©</div><div class="rp-label">Go Alyssa!</div></div><div class="rainbow-poop p2"><div class="rp-icon">Ã°ÂÂÂÃ°ÂÂÂ©</div><div class="rp-label">Go Alyssa!</div></div><div class="rainbow-poop p3"><div class="rp-icon">Ã°ÂÂÂÃ°ÂÂÂ©</div><div class="rp-label">Go Alyssa!</div></div><div class="rainbow-trail t1"></div><div class="rainbow-trail t2"></div><div class="rainbow-trail t3"></div><div class="grass"></div></div>
+<div class="unicorn-scene"><div class="unicorn-walk"><div class="u-body"><div class="u-torso"></div><div class="u-head"><div class="u-eye"></div></div><div class="u-horn"></div><div class="u-mane"></div><div class="u-tail"></div><div class="u-leg fl"></div><div class="u-leg fr"></div><div class="u-leg bl"></div><div class="u-leg br"></div></div></div><div class="rainbow-poop p1"><div class="rp-icon">ÃÂ°ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂ©</div><div class="rp-label">Go Alyssa!</div></div><div class="rainbow-poop p2"><div class="rp-icon">ÃÂ°ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂ©</div><div class="rp-label">Go Alyssa!</div></div><div class="rainbow-poop p3"><div class="rp-icon">ÃÂ°ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂ©</div><div class="rp-label">Go Alyssa!</div></div><div class="rainbow-trail t1"></div><div class="rainbow-trail t2"></div><div class="rainbow-trail t3"></div><div class="grass"></div></div>
 </body>
 </html>
