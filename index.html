@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AIRA Ã¢ÂÂ Franchisee Onboarding</title>
+<title>AIRA - Franchisee Onboarding</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -90,6 +90,13 @@ input,select,textarea,button{font-family:inherit;}
 @media(max-width:600px){.grid{grid-template-columns:1fr;padding:12px;}}
 
 
+
+/* DRAG REORDER */
+.se-row{cursor:grab;}
+.se-row.dragging{opacity:.4;background:var(--blue-light);}
+.se-row.drag-over{border-top:2px solid var(--blue);margin-top:-2px;}
+.se-move{display:flex;flex-direction:column;gap:1px;color:var(--muted2);font-size:10px;cursor:grab;padding:0 2px;}
+.se-move span{display:block;width:12px;height:2px;background:var(--muted2);border-radius:1px;}
 /* NOTES */
 .notes-section{padding:8px 14px 14px;border-top:1px solid var(--border-light);}
 .notes-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:6px;}
@@ -141,7 +148,7 @@ input,select,textarea,button{font-family:inherit;}
   <div style="display:flex;align-items:center;gap:14px;">
     <div class="sync-indicator"><div class="sync-dot"></div> Live Sync</div>
     <div class="header-actions">
-      <button class="btn" onclick="openSettings()">Ã¢ÂÂ Edit Steps</button>
+      <button class="btn" onclick="openSettings()">&#9881; Edit Steps</button>
       <button class="btn btn-primary" onclick="openAdd()">+ Add</button>
     </div>
   </div>
@@ -229,7 +236,7 @@ function render() {
       </div>
       <div class="tracker-bar"><div class="tracker-fill" style="width:${p}%"></div></div>
       <div class="steps">${stepsHtml}</div>
-      <div class="notes-section"><div style="display:flex;align-items:center;"><span class="notes-label">Notes</span><span class="notes-saved" id="saved-${f.id}">Saved \u2713</span></div><textarea class="notes-box" placeholder="Add notes..." onchange="saveNotes('${f.id}',this.value)" onfocus="this.style.minHeight='80px'" onblur="this.style.minHeight='50px'">${f.notes||''}</textarea></div><div class="tracker-foot">
+      <div class="notes-section"><div style="display:flex;align-items:center;"><span class="notes-label">Notes</span><span class="notes-saved" id="saved-${f.id}">Saved &#10003;</span></div><textarea class="notes-box" placeholder="Add notes..." onchange="saveNotes('${f.id}',this.value)" onfocus="this.style.minHeight='80px'" onblur="this.style.minHeight='50px'">${f.notes||''}</textarea></div><div class="tracker-foot">
         <span>${doneCount} of ${steps.length} complete</span>
         <button class="remove-btn" onclick="removeFranchisee('${f.id}')">Remove</button>
       </div>
@@ -277,13 +284,31 @@ function openSettings() { renderEditor(); document.getElementById('settingsModal
 function closeSettings() { document.getElementById('settingsModal').classList.remove('show'); }
 function renderEditor() {
   document.getElementById('stepsEditor').innerHTML = steps.map((s, i) => `
-    <div class="se-row">
-      <span class="se-handle">Ã¢Â Â¿</span>
+    <div class="se-row" draggable="true" data-idx="${i}" data-id="${s.id}"
+      ondragstart="dss(event,${i})" ondragover="dso(event)" ondragleave="dsl(event)" ondrop="dsd(event,${i})" ondragend="dse(event)">
+      <div class="se-move"><span></span><span></span><span></span></div>
       <input value="${s.label}" onchange="updateStepLabel('${s.id}',this.value)">
       <span class="se-req ${s.required ? 'active' : ''}" onclick="toggleReq('${s.id}',${!s.required})">${s.required ? 'REQ' : 'opt'}</span>
-      <span class="se-del" onclick="deleteStep('${s.id}')">Ã¢ÂÂ</span>
+      <span class="se-del" onclick="deleteStep('${s.id}')">x</span>
     </div>
   `).join('');
+}
+let _di=null;
+function dss(e,i){_di=i;e.target.closest('.se-row').classList.add('dragging');e.dataTransfer.effectAllowed='move';}
+function dso(e){e.preventDefault();e.target.closest('.se-row')?.classList.add('drag-over');}
+function dsl(e){e.target.closest('.se-row')?.classList.remove('drag-over');}
+function dse(e){document.querySelectorAll('.se-row').forEach(r=>r.classList.remove('dragging','drag-over'));}
+async function dsd(e,ti){
+  e.preventDefault();
+  document.querySelectorAll('.se-row').forEach(r=>r.classList.remove('dragging','drag-over'));
+  if(_di===null||_di===ti)return;
+  const moved=steps.splice(_di,1)[0];
+  steps.splice(ti,0,moved);
+  const ups=steps.map((s,i)=>sb.from('checklist_steps').update({sort_order:i+1}).eq('id',s.id));
+  await Promise.all(ups);
+  _di=null;
+  await loadAll();
+  renderEditor();
 }
 async function updateStepLabel(sid, label) { await sb.from('checklist_steps').update({ label }).eq('id', sid); await loadAll(); renderEditor(); }
 async function toggleReq(sid, val) { await sb.from('checklist_steps').update({ required: val }).eq('id', sid); await loadAll(); renderEditor(); }
@@ -304,6 +329,6 @@ async function addNewStep() {
 }
 loadAll();
 </script>
-<div class="unicorn-scene"><div class="unicorn-walk"><div class="u-body"><div class="u-torso"></div><div class="u-head"><div class="u-eye"></div></div><div class="u-horn"></div><div class="u-mane"></div><div class="u-tail"></div><div class="u-leg fl"></div><div class="u-leg fr"></div><div class="u-leg bl"></div><div class="u-leg br"></div></div></div><div class="rainbow-poop p1"><div class="rp-icon">ðð©</div><div class="rp-label">Go Alyssa!</div></div><div class="rainbow-poop p2"><div class="rp-icon">ðð©</div><div class="rp-label">Go Alyssa!</div></div><div class="rainbow-poop p3"><div class="rp-icon">ðð©</div><div class="rp-label">Go Alyssa!</div></div><div class="rainbow-trail t1"></div><div class="rainbow-trail t2"></div><div class="rainbow-trail t3"></div><div class="grass"></div></div>
+<div class="unicorn-scene"><div class="unicorn-walk"><div class="u-body"><div class="u-torso"></div><div class="u-head"><div class="u-eye"></div></div><div class="u-horn"></div><div class="u-mane"></div><div class="u-tail"></div><div class="u-leg fl"></div><div class="u-leg fr"></div><div class="u-leg bl"></div><div class="u-leg br"></div></div></div><div class="rainbow-poop p1"><div class="rp-icon">Ã°ÂÂÂÃ°ÂÂÂ©</div><div class="rp-label">Go Alyssa!</div></div><div class="rainbow-poop p2"><div class="rp-icon">Ã°ÂÂÂÃ°ÂÂÂ©</div><div class="rp-label">Go Alyssa!</div></div><div class="rainbow-poop p3"><div class="rp-icon">Ã°ÂÂÂÃ°ÂÂÂ©</div><div class="rp-label">Go Alyssa!</div></div><div class="rainbow-trail t1"></div><div class="rainbow-trail t2"></div><div class="rainbow-trail t3"></div><div class="grass"></div></div>
 </body>
 </html>
