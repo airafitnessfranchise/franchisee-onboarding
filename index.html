@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AIRA — Franchisee Onboarding</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -34,6 +35,7 @@ input,select,textarea,button{font-family:inherit;}
 .btn-primary{background:var(--blue);border-color:var(--blue);color:#fff;}
 .btn-primary:hover{background:var(--blue-dark);box-shadow:var(--shadow-lg);}
 .btn-sm{padding:6px 12px;font-size:11px;}
+.loading{display:flex;align-items:center;justify-content:center;height:60vh;color:var(--muted);font-size:14px;font-weight:600;letter-spacing:1px;}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;padding:20px 24px;max-width:1400px;margin:0 auto;}
 .tracker{background:var(--surface);border-radius:12px;border:1px solid var(--border-light);box-shadow:var(--shadow);overflow:hidden;transition:box-shadow .2s;}
 .tracker:hover{box-shadow:var(--shadow-lg);}
@@ -82,34 +84,178 @@ input,select,textarea,button{font-family:inherit;}
 .add-step-row{display:flex;gap:6px;margin-top:6px;}
 .add-step-row input{flex:1;border:1px solid var(--border);border-radius:var(--radius);padding:8px 10px;font-size:12px;outline:none;color:var(--text);}
 .add-step-row input:focus{border-color:var(--blue);}
+.sync-indicator{font-size:10px;color:var(--green);font-weight:600;display:flex;align-items:center;gap:4px;}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
 @media(max-width:600px){.grid{grid-template-columns:1fr;padding:12px;}}
 </style>
 </head>
 <body>
-<div class="header"><div class="logo"><div class="logo-mark">A</div><span class="logo-text">AIRA</span><span class="logo-sub">Franchisee Onboarding</span></div><div class="header-actions"><button class="btn" onclick="openSettings()">⚙ Edit Steps</button><button class="btn btn-primary" onclick="openAdd()">+ Add</button></div></div>
-<div class="grid" id="grid"></div>
-<div class="modal-overlay" id="addModal"><div class="modal"><h2>Add Franchisee</h2><div class="m-field"><label>Name</label><input id="a-name" placeholder="John & Jane Smith"></div><div class="m-field"><label>Location</label><input id="a-loc" placeholder="Austin, TX"></div><div class="m-actions"><button class="btn" onclick="closeAdd()">Cancel</button><button class="btn btn-primary" onclick="doAdd()">Add</button></div></div></div>
-<div class="modal-overlay" id="settingsModal"><div class="modal" style="width:480px;"><h2>Edit Checklist Steps</h2><p style="font-size:11px;color:var(--muted);margin-bottom:12px;">Drag to reorder. Click REQ/opt to toggle required. New franchisees get updated steps automatically.</p><div class="steps-editor" id="stepsEditor"></div><div class="add-step-row"><input id="newStepInput" placeholder="New step name..." onkeydown="if(event.key==='Enter')addNewStep()"><button class="btn btn-sm btn-primary" onclick="addNewStep()">+ Add</button></div><div class="m-actions" style="margin-top:14px;"><button class="btn btn-sm" style="color:var(--red);border-color:rgba(220,38,38,0.3);" onclick="resetSteps()">Reset</button><div style="flex:1"></div><button class="btn" onclick="closeSettings()">Cancel</button><button class="btn btn-primary" onclick="saveSettings()">Save</button></div></div></div>
+<div class="header">
+  <div class="logo">
+    <div class="logo-mark">A</div>
+    <span class="logo-text">AIRA</span>
+    <span class="logo-sub">Franchisee Onboarding</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:14px;">
+    <div class="sync-indicator"><div class="sync-dot"></div> Live Sync</div>
+    <div class="header-actions">
+      <button class="btn" onclick="openSettings()">⚙ Edit Steps</button>
+      <button class="btn btn-primary" onclick="openAdd()">+ Add</button>
+    </div>
+  </div>
+</div>
+<div class="loading" id="loadingState">Loading franchisees...</div>
+<div class="grid" id="grid" style="display:none;"></div>
+<div class="modal-overlay" id="addModal">
+  <div class="modal">
+    <h2>Add Franchisee</h2>
+    <div class="m-field"><label>Name</label><input id="a-name" placeholder="John & Jane Smith"></div>
+    <div class="m-field"><label>Location</label><input id="a-loc" placeholder="Austin, TX"></div>
+    <div class="m-actions">
+      <button class="btn" onclick="closeAdd()">Cancel</button>
+      <button class="btn btn-primary" id="addBtn" onclick="doAdd()">Add</button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="settingsModal">
+  <div class="modal" style="width:480px;">
+    <h2>Edit Checklist Steps</h2>
+    <p style="font-size:11px;color:var(--muted);margin-bottom:12px;">Edit step names or toggle required. Changes apply to all franchisees in real time.</p>
+    <div class="steps-editor" id="stepsEditor"></div>
+    <div class="add-step-row">
+      <input id="newStepInput" placeholder="New step name..." onkeydown="if(event.key==='Enter')addNewStep()">
+      <button class="btn btn-sm btn-primary" onclick="addNewStep()">+ Add</button>
+    </div>
+    <div class="m-actions" style="margin-top:14px;">
+      <button class="btn" onclick="closeSettings()">Done</button>
+    </div>
+  </div>
+</div>
 <script>
-const DEFAULT_STEPS=[{id:'training_portal',label:'Added to Training Portal \u2014 "Start Here" & Finding a Space',required:false},{id:'lease_signed',label:'Lease Signed',required:false},{id:'equipment_ordered',label:'Equipment Ordered',required:false},{id:'vp_intro',label:'VP Intro Text + Roadmap (5-Day & Compliance)',required:true},{id:'sign_ordered',label:'Inside/Outside Sign Ordered',required:false},{id:'access_control',label:'Gym Access Control Ordered',required:false},{id:'facebook',label:'Facebook Account Created',required:false},{id:'instagram',label:'Instagram Account Created',required:false},{id:'email',label:'Email Created',required:false},{id:'website',label:'Website Created',required:false},{id:'stripe',label:'Stripe & Equipment Delivered',required:false},{id:'gymmaster',label:'GymMaster Account',required:false},{id:'ad_account',label:'Ad Account Made',required:false},{id:'compliance',label:'Compliance Check',required:true},{id:'grand_opening',label:'Grand Opening',required:false}];
-let checklist=JSON.parse(localStorage.getItem('aira_qt_steps'))||JSON.parse(JSON.stringify(DEFAULT_STEPS));let trackers=JSON.parse(localStorage.getItem('aira_qt_data'))||getSample();let editSteps=[];
-function save(){localStorage.setItem('aira_qt_data',JSON.stringify(trackers));localStorage.setItem('aira_qt_steps',JSON.stringify(checklist));}
-function getSample(){return [{id:'t1',name:'Marcus & Tina Rivera',location:'San Antonio, TX',steps:{training_portal:true,lease_signed:true,equipment_ordered:true,vp_intro:true,sign_ordered:false,access_control:false,facebook:false,instagram:false,email:false,website:false,stripe:false,gymmaster:false,ad_account:false,compliance:false,grand_opening:false}},{id:'t2',name:'Derek Washington',location:'Memphis, TN',steps:{training_portal:false,lease_signed:false,equipment_ordered:false,vp_intro:false,sign_ordered:false,access_control:false,facebook:false,instagram:false,email:false,website:false,stripe:false,gymmaster:false,ad_account:false,compliance:false,grand_opening:false}},{id:'t3',name:'Kristen Park',location:'Boise, ID',steps:{training_portal:true,lease_signed:true,equipment_ordered:true,vp_intro:true,sign_ordered:true,access_control:true,facebook:true,instagram:true,email:true,website:true,stripe:true,gymmaster:true,ad_account:true,compliance:false,grand_opening:false}}];}
-function pct(t){const keys=checklist.map(s=>s.id);const done=keys.filter(k=>t.steps[k]).length;return Math.round(done/keys.length*100);}
-function render(){const g=document.getElementById('grid');g.innerHTML=trackers.map(t=>{const p=pct(t);const doneCount=checklist.filter(s=>t.steps[s.id]).length;checklist.forEach(s=>{if(!(s.id in t.steps))t.steps[s.id]=false;});let stepsHtml=checklist.map((s,i)=>{const done=t.steps[s.id];return '<div class="step '+(done?'done':'')+'" onclick="toggle(\''+t.id+'\',\''+s.id+'\')"><span class="step-num">'+(i+1)+'</span><div class="step-check">'+(done?'\u2713':'')+'</div><span class="step-text">'+s.label+'</span>'+(s.required?'<span class="step-req">REQ</span>':'')+'</div>';}).join('');return '<div class="tracker"><div class="tracker-head"><div class="tracker-info"><h3>'+t.name+'</h3><p>'+t.location+'</p></div><div class="tracker-pct">'+p+'%</div></div><div class="tracker-bar"><div class="tracker-fill" style="width:'+p+'%"></div></div><div class="steps">'+stepsHtml+'</div><div class="tracker-foot"><span>'+doneCount+' of '+checklist.length+' complete</span><button class="remove-btn" onclick="removeTracker(\''+t.id+'\')">'+'Remove</button></div></div>';}).join('');g.innerHTML+='<div class="add-card" onclick="openAdd()"><span>+</span><p>Add Franchisee</p></div>';}
-function toggle(tid,sid){const t=trackers.find(x=>x.id===tid);t.steps[sid]=!t.steps[sid];save();render();}
-function removeTracker(tid){if(!confirm('Remove this tracker?'))return;trackers=trackers.filter(x=>x.id!==tid);save();render();}
-function openAdd(){document.getElementById('addModal').classList.add('show');}
-function closeAdd(){document.getElementById('addModal').classList.remove('show');}
-function doAdd(){const name=document.getElementById('a-name').value.trim();const loc=document.getElementById('a-loc').value.trim();if(!name||!loc){alert('Name and location required.');return;}const steps={};checklist.forEach(s=>steps[s.id]=false);trackers.push({id:'t'+Date.now(),name,location:loc,steps});save();closeAdd();render();document.getElementById('a-name').value='';document.getElementById('a-loc').value='';}
-function openSettings(){editSteps=JSON.parse(JSON.stringify(checklist));renderEditor();document.getElementById('settingsModal').classList.add('show');}
-function closeSettings(){document.getElementById('settingsModal').classList.remove('show');}
-function renderEditor(){document.getElementById('stepsEditor').innerHTML=editSteps.map((s,i)=>'<div class="se-row" draggable="true" data-idx="'+i+'" ondragstart="ds(event,'+i+')" ondragover="event.preventDefault()" ondrop="dp(event,'+i+')"><span class="se-handle">\u283f</span><input value="'+s.label+'" oninput="editSteps['+i+'].label=this.value"><span class="se-req '+(s.required?'active':'')+'" onclick="editSteps['+i+'].required=!editSteps['+i+'].required;renderEditor();">'+(s.required?'REQ':'opt')+'</span><span class="se-del" onclick="editSteps.splice('+i+',1);renderEditor();">\u2715</span></div>').join('');}
-let di=null;function ds(e,i){di=i;e.dataTransfer.effectAllowed='move';}function dp(e,i){e.preventDefault();if(di===null||di===i)return;const item=editSteps.splice(di,1)[0];editSteps.splice(i,0,item);di=null;renderEditor();}
-function addNewStep(){const inp=document.getElementById('newStepInput');const label=inp.value.trim();if(!label)return;editSteps.push({id:'c'+Date.now(),label,required:false});inp.value='';renderEditor();}
-function saveSettings(){editSteps.forEach((s,i)=>{if(!s.id)s.id='s'+i+'_'+Date.now();});checklist=JSON.parse(JSON.stringify(editSteps));trackers.forEach(t=>{checklist.forEach(s=>{if(!(s.id in t.steps))t.steps[s.id]=false;});});save();closeSettings();render();}
-function resetSteps(){if(!confirm('Reset to default 15 steps?'))return;editSteps=JSON.parse(JSON.stringify(DEFAULT_STEPS));renderEditor();}
-render();
+const SUPABASE_URL = 'https://ntlfpevmeesjjgoinghi.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im50bGZwZXZtZWVzampnb2luZ2hpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4OTgxNDUsImV4cCI6MjA5MDQ3NDE0NX0.GLDunwLJyFozfYtvIo9pZ-UcLajDODLrFGiLDdFjDNU';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let steps = [];
+let franchisees = [];
+let stepCompletions = {};
+async function loadAll() {
+  const [stepsRes, franchiseesRes, completionsRes] = await Promise.all([
+    sb.from('checklist_steps').select('*').order('sort_order'),
+    sb.from('franchisees').select('*').order('created_at'),
+    sb.from('franchisee_steps').select('*')
+  ]);
+  steps = stepsRes.data || [];
+  franchisees = franchiseesRes.data || [];
+  stepCompletions = {};
+  (completionsRes.data || []).forEach(c => {
+    if (!stepCompletions[c.franchisee_id]) stepCompletions[c.franchisee_id] = {};
+    stepCompletions[c.franchisee_id][c.step_id] = c.completed;
+  });
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('grid').style.display = 'grid';
+  render();
+}
+sb.channel('onboarding-changes')
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'franchisees' }, () => loadAll())
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'franchisee_steps' }, () => loadAll())
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'checklist_steps' }, () => loadAll())
+  .subscribe();
+function pct(fid) {
+  const comp = stepCompletions[fid] || {};
+  const done = steps.filter(s => comp[s.id]).length;
+  return steps.length ? Math.round(done / steps.length * 100) : 0;
+}
+function render() {
+  const g = document.getElementById('grid');
+  g.innerHTML = franchisees.map(f => {
+    const p = pct(f.id);
+    const comp = stepCompletions[f.id] || {};
+    const doneCount = steps.filter(s => comp[s.id]).length;
+    let stepsHtml = steps.map((s, i) => {
+      const done = comp[s.id] || false;
+      return `<div class="step ${done ? 'done' : ''}" onclick="toggleStep('${f.id}','${s.id}',${!done})">
+        <span class="step-num">${i + 1}</span>
+        <div class="step-check">${done ? '\u2713' : ''}</div>
+        <span class="step-text">${s.label}</span>
+        ${s.required ? '<span class="step-req">REQ</span>' : ''}
+      </div>`;
+    }).join('');
+    return `<div class="tracker">
+      <div class="tracker-head">
+        <div class="tracker-info"><h3>${f.name}</h3><p>${f.location}</p></div>
+        <div class="tracker-pct">${p}%</div>
+      </div>
+      <div class="tracker-bar"><div class="tracker-fill" style="width:${p}%"></div></div>
+      <div class="steps">${stepsHtml}</div>
+      <div class="tracker-foot">
+        <span>${doneCount} of ${steps.length} complete</span>
+        <button class="remove-btn" onclick="removeFranchisee('${f.id}')">Remove</button>
+      </div>
+    </div>`;
+  }).join('');
+  g.innerHTML += `<div class="add-card" onclick="openAdd()"><span>+</span><p>Add Franchisee</p></div>`;
+}
+async function toggleStep(fid, sid, val) {
+  if (!stepCompletions[fid]) stepCompletions[fid] = {};
+  stepCompletions[fid][sid] = val;
+  render();
+  await sb.from('franchisee_steps').upsert({
+    franchisee_id: fid, step_id: sid, completed: val, updated_at: new Date().toISOString()
+  }, { onConflict: 'franchisee_id,step_id' });
+}
+function openAdd() { document.getElementById('addModal').classList.add('show'); }
+function closeAdd() { document.getElementById('addModal').classList.remove('show'); }
+async function doAdd() {
+  const name = document.getElementById('a-name').value.trim();
+  const loc = document.getElementById('a-loc').value.trim();
+  if (!name || !loc) { alert('Name and location required.'); return; }
+  document.getElementById('addBtn').textContent = 'Adding...';
+  const { data, error } = await sb.from('franchisees').insert({ name, location: loc }).select().single();
+  if (error) { alert('Error: ' + error.message); document.getElementById('addBtn').textContent = 'Add'; return; }
+  const stepRows = steps.map(s => ({ franchisee_id: data.id, step_id: s.id, completed: false }));
+  if (stepRows.length) await sb.from('franchisee_steps').insert(stepRows);
+  document.getElementById('a-name').value = '';
+  document.getElementById('a-loc').value = '';
+  document.getElementById('addBtn').textContent = 'Add';
+  closeAdd();
+  await loadAll();
+}
+async function removeFranchisee(fid) {
+  if (!confirm('Remove this franchisee?')) return;
+  await sb.from('franchisees').delete().eq('id', fid);
+  await loadAll();
+}
+function openSettings() { renderEditor(); document.getElementById('settingsModal').classList.add('show'); }
+function closeSettings() { document.getElementById('settingsModal').classList.remove('show'); }
+function renderEditor() {
+  document.getElementById('stepsEditor').innerHTML = steps.map((s, i) => `
+    <div class="se-row">
+      <span class="se-handle">⠿</span>
+      <input value="${s.label}" onchange="updateStepLabel('${s.id}',this.value)">
+      <span class="se-req ${s.required ? 'active' : ''}" onclick="toggleReq('${s.id}',${!s.required})">${s.required ? 'REQ' : 'opt'}</span>
+      <span class="se-del" onclick="deleteStep('${s.id}')">✕</span>
+    </div>
+  `).join('');
+}
+async function updateStepLabel(sid, label) { await sb.from('checklist_steps').update({ label }).eq('id', sid); await loadAll(); renderEditor(); }
+async function toggleReq(sid, val) { await sb.from('checklist_steps').update({ required: val }).eq('id', sid); await loadAll(); renderEditor(); }
+async function deleteStep(sid) { if (!confirm('Delete this step for all franchisees?')) return; await sb.from('checklist_steps').delete().eq('id', sid); await loadAll(); renderEditor(); }
+async function addNewStep() {
+  const inp = document.getElementById('newStepInput');
+  const label = inp.value.trim();
+  if (!label) return;
+  const maxOrder = steps.length ? Math.max(...steps.map(s => s.sort_order)) : 0;
+  const { data } = await sb.from('checklist_steps').insert({ label, required: false, sort_order: maxOrder + 1 }).select().single();
+  if (data && franchisees.length) {
+    const rows = franchisees.map(f => ({ franchisee_id: f.id, step_id: data.id, completed: false }));
+    await sb.from('franchisee_steps').insert(rows);
+  }
+  inp.value = '';
+  await loadAll();
+  renderEditor();
+}
+loadAll();
 </script>
 </body>
 </html>
