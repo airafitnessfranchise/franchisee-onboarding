@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AIRA — Franchisee Onboarding</title>
+<title>AIRA â Franchisee Onboarding</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -88,6 +88,38 @@ input,select,textarea,button{font-family:inherit;}
 .sync-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
 @media(max-width:600px){.grid{grid-template-columns:1fr;padding:12px;}}
+
+/* UNICORN */
+.unicorn-scene{position:fixed;bottom:0;left:0;right:0;height:80px;pointer-events:none;z-index:999;overflow:hidden;}
+.grass{position:absolute;bottom:0;left:0;right:0;height:16px;background:linear-gradient(0deg,#16a34a,#4ade80);border-top:2px solid #15803d;}
+.unicorn-walk{position:absolute;bottom:14px;animation:unicornWalk 16s linear infinite;}
+@keyframes unicornWalk{0%{left:-70px;}100%{left:calc(100% + 70px);}}
+.u-body{position:relative;width:44px;height:28px;}
+.u-torso{position:absolute;bottom:0;left:6px;width:30px;height:18px;background:#faf5ff;border-radius:10px 10px 3px 3px;border:1.5px solid #d8b4fe;}
+.u-head{position:absolute;top:-4px;right:-6px;width:16px;height:14px;background:#faf5ff;border-radius:7px 9px 3px 5px;border:1.5px solid #d8b4fe;}
+.u-eye{position:absolute;top:5px;right:3px;width:2.5px;height:3px;background:#1e1b4b;border-radius:50%;}
+.u-horn{position:absolute;top:-10px;right:3px;width:2.5px;height:11px;background:linear-gradient(0deg,#fbbf24,#f59e0b);border-radius:1.5px;transform:rotate(8deg);}
+.u-mane{position:absolute;top:-1px;right:10px;width:12px;height:12px;background:linear-gradient(135deg,#c084fc,#818cf8,#60a5fa);border-radius:50% 50% 0 50%;opacity:.7;}
+.u-tail{position:absolute;bottom:6px;left:-8px;width:12px;height:9px;background:linear-gradient(135deg,#f472b6,#c084fc,#60a5fa);border-radius:50%;opacity:.7;animation:tailWag .6s ease-in-out infinite alternate;}
+@keyframes tailWag{0%{transform:rotate(-10deg);}100%{transform:rotate(10deg);}}
+.u-leg{position:absolute;bottom:-9px;width:3.5px;height:11px;background:#d8b4fe;border-radius:0 0 2px 2px;transform-origin:top;}
+.u-leg.fl{left:10px;animation:trot .35s ease-in-out infinite alternate;}
+.u-leg.fr{left:15px;animation:trot .35s ease-in-out infinite alternate-reverse;}
+.u-leg.bl{left:24px;animation:trot .35s ease-in-out infinite alternate-reverse;}
+.u-leg.br{left:29px;animation:trot .35s ease-in-out infinite alternate;}
+@keyframes trot{0%{transform:rotate(-14deg);}100%{transform:rotate(14deg);}}
+.rainbow-poop{position:absolute;bottom:16px;opacity:0;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.rainbow-poop.p1{left:28%;animation:poopDrop 16s linear infinite;}
+.rainbow-poop.p2{left:58%;animation:poopDrop 16s linear infinite 5.3s;}
+.rainbow-poop.p3{left:82%;animation:poopDrop 16s linear infinite 10.6s;}
+@keyframes poopDrop{0%,30%{opacity:0;transform:translateY(0) scale(.8);}32%{opacity:1;transform:translateY(0) scale(1);}45%{opacity:1;transform:translateY(-2px) scale(1);}58%{opacity:0;transform:translateY(-6px) scale(.9);}100%{opacity:0;}}
+.rp-icon{font-size:16px;line-height:1;}
+.rp-label{font-size:7px;font-weight:800;color:#7c3aed;letter-spacing:.5px;white-space:nowrap;font-family:'Plus Jakarta Sans',sans-serif;text-shadow:0 0 4px rgba(124,58,252,.3);}
+.rainbow-trail{position:absolute;bottom:18px;height:5px;border-radius:3px;background:linear-gradient(90deg,#ef4444,#f97316,#eab308,#22c55e,#3b82f6,#8b5cf6);opacity:0;}
+.rainbow-trail.t1{left:26%;animation:trail 16s linear infinite;}
+.rainbow-trail.t2{left:56%;animation:trail 16s linear infinite 5.3s;}
+.rainbow-trail.t3{left:80%;animation:trail 16s linear infinite 10.6s;}
+@keyframes trail{0%,30%{opacity:0;width:0;}32%{opacity:.5;width:0;}38%{opacity:.5;width:30px;}50%{opacity:0;width:45px;}100%{opacity:0;}}
 </style>
 </head>
 <body>
@@ -100,7 +132,7 @@ input,select,textarea,button{font-family:inherit;}
   <div style="display:flex;align-items:center;gap:14px;">
     <div class="sync-indicator"><div class="sync-dot"></div> Live Sync</div>
     <div class="header-actions">
-      <button class="btn" onclick="openSettings()">⚙ Edit Steps</button>
+      <button class="btn" onclick="openSettings()">â Edit Steps</button>
       <button class="btn btn-primary" onclick="openAdd()">+ Add</button>
     </div>
   </div>
@@ -231,10 +263,10 @@ function closeSettings() { document.getElementById('settingsModal').classList.re
 function renderEditor() {
   document.getElementById('stepsEditor').innerHTML = steps.map((s, i) => `
     <div class="se-row">
-      <span class="se-handle">⠿</span>
+      <span class="se-handle">â ¿</span>
       <input value="${s.label}" onchange="updateStepLabel('${s.id}',this.value)">
       <span class="se-req ${s.required ? 'active' : ''}" onclick="toggleReq('${s.id}',${!s.required})">${s.required ? 'REQ' : 'opt'}</span>
-      <span class="se-del" onclick="deleteStep('${s.id}')">✕</span>
+      <span class="se-del" onclick="deleteStep('${s.id}')">â</span>
     </div>
   `).join('');
 }
@@ -257,5 +289,6 @@ async function addNewStep() {
 }
 loadAll();
 </script>
+<div class="unicorn-scene"><div class="unicorn-walk"><div class="u-body"><div class="u-torso"></div><div class="u-head"><div class="u-eye"></div></div><div class="u-horn"></div><div class="u-mane"></div><div class="u-tail"></div><div class="u-leg fl"></div><div class="u-leg fr"></div><div class="u-leg bl"></div><div class="u-leg br"></div></div></div><div class="rainbow-poop p1"><div class="rp-icon">🌈💩</div><div class="rp-label">Go Alyssa!</div></div><div class="rainbow-poop p2"><div class="rp-icon">🌈💩</div><div class="rp-label">Go Alyssa!</div></div><div class="rainbow-poop p3"><div class="rp-icon">🌈💩</div><div class="rp-label">Go Alyssa!</div></div><div class="rainbow-trail t1"></div><div class="rainbow-trail t2"></div><div class="rainbow-trail t3"></div><div class="grass"></div></div>
 </body>
 </html>
