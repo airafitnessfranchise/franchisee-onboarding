@@ -391,7 +391,9 @@ async function addNewStep() {
 
 // ── NOTES ──
 async function saveNotes(fid, notes) {
-  await sb.from('franchisees').update({ notes }).eq('id', fid);
+  console.log('saveNotes called:', fid, notes);
+  const { error } = await sb.from('franchisees').update({ notes }).eq('id', fid);
+  if (error) { console.error('saveNotes error:', error); return; }
   var f = franchisees.find(function(x){ return x.id === fid; });
   if (f) f.notes = notes;
   var el = document.getElementById('ns-' + fid);
