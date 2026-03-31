@@ -265,8 +265,8 @@ function render() {
       <div class="tracker-bar"><div class="tracker-fill" style="width:${p}%"></div></div>
       <div class="steps">${stepsHtml}</div>
       <div class="notes-section">
-        <div style="display:flex;align-items:center;"><span class="notes-label">Notes</span><span class="notes-saved" id="ns-\${f.id}">Saved</span></div>
-        <textarea class="notes-box" id="nb-\${f.id}" placeholder="Add notes..." onblur="saveNotes('\${f.id}',this.value)">\${f.notes||''}</textarea>
+        <div style="display:flex;align-items:center;"><span class="notes-label">Notes</span><span class="notes-saved" id="ns-${f.id}">Saved</span></div>
+        <textarea class="notes-box" id="nb-${f.id}" placeholder="Add notes..." onblur="saveNotes('${f.id}',this.value)">${f.notes||''}</textarea>
       </div>
       <div class="tracker-foot">
         <span>${doneCount} of ${steps.length} complete</span>
