@@ -116,37 +116,88 @@ input,select,textarea,button{font-family:inherit;}
 .notes-saved.show{opacity:1;}
 
 /* ── UNICORN ── */
-.unicorn-scene{position:fixed;bottom:0;left:0;right:0;height:80px;pointer-events:none;z-index:999;overflow:hidden;}
-.grass{position:absolute;bottom:0;left:0;right:0;height:16px;background:linear-gradient(0deg,#16a34a,#4ade80);border-top:2px solid #15803d;}
-.grass::before{content:'';position:absolute;top:-8px;left:0;right:0;height:10px;background:repeating-conic-gradient(#22c55e 0% 25%,transparent 0% 50%) 0 0/12px 12px;opacity:.5;}
-.unicorn-walk{position:absolute;bottom:14px;animation:unicornWalk 16s linear infinite;}
-@keyframes unicornWalk{0%{left:-70px;}100%{left:calc(100% + 70px);}}
-.u-body{position:relative;width:44px;height:28px;}
-.u-torso{position:absolute;bottom:0;left:6px;width:30px;height:18px;background:#faf5ff;border-radius:10px 10px 3px 3px;border:1.5px solid #d8b4fe;}
-.u-head{position:absolute;top:-4px;right:-6px;width:16px;height:14px;background:#faf5ff;border-radius:7px 9px 3px 5px;border:1.5px solid #d8b4fe;}
-.u-eye{position:absolute;top:5px;right:3px;width:2.5px;height:3px;background:#1e1b4b;border-radius:50%;}
-.u-horn{position:absolute;top:-10px;right:3px;width:2.5px;height:11px;background:linear-gradient(0deg,#fbbf24,#f59e0b);border-radius:1.5px;transform:rotate(8deg);}
-.u-mane{position:absolute;top:-1px;right:10px;width:12px;height:12px;background:linear-gradient(135deg,#c084fc,#818cf8,#60a5fa);border-radius:50% 50% 0 50%;opacity:.7;}
-.u-tail{position:absolute;bottom:6px;left:-8px;width:12px;height:9px;background:linear-gradient(135deg,#f472b6,#c084fc,#60a5fa);border-radius:50%;opacity:.7;animation:tailWag .6s ease-in-out infinite alternate;}
-@keyframes tailWag{0%{transform:rotate(-10deg);}100%{transform:rotate(10deg);}}
-.u-leg{position:absolute;bottom:-9px;width:3.5px;height:11px;background:#d8b4fe;border-radius:0 0 2px 2px;transform-origin:top;}
-.u-leg.fl{left:10px;animation:trot .35s ease-in-out infinite alternate;}
-.u-leg.fr{left:15px;animation:trot .35s ease-in-out infinite alternate-reverse;}
-.u-leg.bl{left:24px;animation:trot .35s ease-in-out infinite alternate-reverse;}
-.u-leg.br{left:29px;animation:trot .35s ease-in-out infinite alternate;}
-@keyframes trot{0%{transform:rotate(-14deg);}100%{transform:rotate(14deg);}}
-.rainbow-poop{position:absolute;bottom:16px;opacity:0;display:flex;flex-direction:column;align-items:center;gap:2px;}
-.rainbow-poop.p1{left:28%;animation:poopDrop 16s linear infinite;}
-.rainbow-poop.p2{left:58%;animation:poopDrop 16s linear infinite 5.3s;}
-.rainbow-poop.p3{left:82%;animation:poopDrop 16s linear infinite 10.6s;}
-@keyframes poopDrop{0%,30%{opacity:0;transform:translateY(0) scale(.8);}32%{opacity:1;transform:translateY(0) scale(1);}45%{opacity:1;transform:translateY(-2px) scale(1);}58%{opacity:0;transform:translateY(-6px) scale(.9);}100%{opacity:0;}}
-.rp-icon{font-size:16px;line-height:1;}
-.rp-label{font-size:7px;font-weight:800;color:#7c3aed;letter-spacing:.5px;white-space:nowrap;font-family:'Plus Jakarta Sans',sans-serif;text-shadow:0 0 4px rgba(124,58,252,.3);}
-.rainbow-trail{position:absolute;bottom:18px;height:5px;border-radius:3px;background:linear-gradient(90deg,#ef4444,#f97316,#eab308,#22c55e,#3b82f6,#8b5cf6);opacity:0;}
-.rainbow-trail.t1{left:26%;animation:trail 16s linear infinite;}
-.rainbow-trail.t2{left:56%;animation:trail 16s linear infinite 5.3s;}
-.rainbow-trail.t3{left:80%;animation:trail 16s linear infinite 10.6s;}
-@keyframes trail{0%,30%{opacity:0;width:0;}32%{opacity:.5;width:0;}38%{opacity:.5;width:30px;}50%{opacity:0;width:45px;}100%{opacity:0;}}
+.unicorn-scene{position:fixed;bottom:0;left:0;right:0;height:100px;pointer-events:none;z-index:999;overflow:hidden;}
+.grass{position:absolute;bottom:0;left:0;right:0;height:20px;background:linear-gradient(0deg,#15803d 0%,#16a34a 30%,#22c55e 60%,#4ade80 100%);border-top:2px solid #14532d;}
+.grass::before{content:'';position:absolute;top:-6px;left:0;right:0;height:8px;background:repeating-linear-gradient(90deg,transparent 0px,transparent 6px,#22c55e 6px,#22c55e 8px,transparent 8px,transparent 14px);opacity:.6;}
+.grass::after{content:'';position:absolute;top:-10px;left:0;right:0;height:12px;background:repeating-linear-gradient(90deg,transparent 0px,transparent 20px,#4ade80 20px,#4ade80 22px,transparent 22px,transparent 40px);opacity:.3;}
+.unicorn-walk{position:absolute;bottom:18px;animation:unicornWalk 20s linear infinite;}
+@keyframes unicornWalk{0%{left:-100px;}100%{left:calc(100% + 100px);}}
+.u-body{position:relative;width:70px;height:50px;animation:bounce .5s ease-in-out infinite;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
+.u-torso{position:absolute;bottom:0;left:10px;width:42px;height:28px;background:linear-gradient(180deg,#faf5ff 0%,#f3e8ff 50%,#ede5ff 100%);border-radius:16px 14px 8px 10px;border:2px solid #d8b4fe;box-shadow:inset -4px -2px 6px rgba(192,132,252,0.15),0 2px 4px rgba(0,0,0,0.08);}
+.u-torso::after{content:'';position:absolute;bottom:3px;left:8px;width:16px;height:10px;background:rgba(255,255,255,0.5);border-radius:50%;}
+.u-head{position:absolute;top:-8px;right:-10px;width:26px;height:24px;background:linear-gradient(160deg,#fefcff 0%,#faf5ff 50%,#f3e8ff 100%);border-radius:13px 14px 8px 10px;border:2px solid #d8b4fe;box-shadow:0 2px 4px rgba(0,0,0,0.06);z-index:2;}
+.u-head::after{content:'';position:absolute;bottom:4px;right:2px;width:8px;height:5px;background:rgba(251,113,133,0.35);border-radius:50%;filter:blur(1px);}
+.u-snout{position:absolute;bottom:2px;right:-3px;width:10px;height:8px;background:#faf5ff;border-radius:0 6px 4px 0;border-right:1.5px solid #d8b4fe;border-bottom:1.5px solid #d8b4fe;border-top:1.5px solid #d8b4fe;}
+.u-nostril{position:absolute;bottom:3px;right:1px;width:2px;height:1.5px;background:#c4b5fd;border-radius:50%;}
+.u-mouth{position:absolute;bottom:1px;right:3px;width:4px;height:2px;border-bottom:1.5px solid #ddd6fe;border-radius:0 0 3px 3px;}
+.u-eye{position:absolute;top:7px;right:8px;width:6px;height:7px;background:#312e81;border-radius:50%;animation:blink 4s ease-in-out infinite;z-index:3;}
+.u-eye::before{content:'';position:absolute;top:1px;right:1px;width:2.5px;height:2.5px;background:#fff;border-radius:50%;}
+.u-eye::after{content:'';position:absolute;bottom:1px;left:1px;width:1.5px;height:1.5px;background:rgba(255,255,255,0.6);border-radius:50%;}
+@keyframes blink{0%,42%,46%,100%{transform:scaleY(1);}44%{transform:scaleY(0.1);}}
+.u-eye2{position:absolute;top:8px;right:16px;width:4px;height:5px;background:#312e81;border-radius:50%;animation:blink 4s ease-in-out infinite;z-index:1;}
+.u-eye2::before{content:'';position:absolute;top:1px;right:1px;width:1.5px;height:1.5px;background:#fff;border-radius:50%;}
+.u-ear{position:absolute;top:-4px;right:6px;width:7px;height:10px;background:#f3e8ff;border-radius:3px 5px 0 0;border:1.5px solid #d8b4fe;border-bottom:none;transform:rotate(8deg);z-index:1;}
+.u-ear::after{content:'';position:absolute;top:2px;left:2px;width:3px;height:5px;background:rgba(251,113,133,0.25);border-radius:2px 3px 0 0;}
+.u-horn{position:absolute;top:-18px;right:8px;width:4px;height:16px;background:linear-gradient(0deg,#fbbf24 0%,#f59e0b 30%,#fbbf24 50%,#fcd34d 70%,#fde68a 100%);border-radius:2px 2px 1px 1px;transform:rotate(6deg);z-index:4;box-shadow:0 0 6px rgba(251,191,36,0.4);}
+.u-horn::before{content:'';position:absolute;top:2px;left:0;width:4px;height:12px;background:repeating-linear-gradient(0deg,transparent 0px,transparent 2px,rgba(255,255,255,0.3) 2px,rgba(255,255,255,0.3) 3px);border-radius:2px;}
+.u-horn::after{content:'';position:absolute;top:-4px;left:-2px;width:3px;height:3px;background:#fde68a;border-radius:50%;box-shadow:6px 2px 0 0 rgba(253,230,138,0.6),-2px 6px 0 0 rgba(253,230,138,0.4);animation:sparkle 1.5s ease-in-out infinite;}
+@keyframes sparkle{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.3;transform:scale(0.5);}}
+.u-mane{position:absolute;top:-6px;right:14px;width:20px;height:20px;z-index:1;}
+.u-mane-strand{position:absolute;border-radius:50%;opacity:.75;}
+.u-mane-strand:nth-child(1){width:10px;height:10px;background:#c084fc;top:0;left:0;animation:maneFlow 1.2s ease-in-out infinite;}
+.u-mane-strand:nth-child(2){width:12px;height:8px;background:#818cf8;top:4px;left:-3px;animation:maneFlow 1.2s ease-in-out infinite .15s;}
+.u-mane-strand:nth-child(3){width:9px;height:9px;background:#60a5fa;top:8px;left:-1px;animation:maneFlow 1.2s ease-in-out infinite .3s;}
+.u-mane-strand:nth-child(4){width:8px;height:7px;background:#f472b6;top:2px;left:5px;animation:maneFlow 1.2s ease-in-out infinite .45s;}
+@keyframes maneFlow{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-2px,1px) scale(1.1);}}
+.u-tail{position:absolute;bottom:8px;left:-14px;width:22px;height:16px;z-index:0;}
+.u-tail-strand{position:absolute;border-radius:50%;opacity:.7;}
+.u-tail-strand:nth-child(1){width:14px;height:10px;background:#f472b6;bottom:0;right:0;animation:tailSwish .8s ease-in-out infinite alternate;}
+.u-tail-strand:nth-child(2){width:12px;height:8px;background:#c084fc;bottom:2px;right:-4px;animation:tailSwish .8s ease-in-out infinite alternate .1s;}
+.u-tail-strand:nth-child(3){width:10px;height:9px;background:#60a5fa;bottom:-1px;right:-7px;animation:tailSwish .8s ease-in-out infinite alternate .2s;}
+.u-tail-strand:nth-child(4){width:8px;height:6px;background:#818cf8;bottom:4px;right:-2px;animation:tailSwish .8s ease-in-out infinite alternate .3s;}
+@keyframes tailSwish{0%{transform:rotate(-15deg) translateX(0);}100%{transform:rotate(10deg) translateX(3px);}}
+.u-leg{position:absolute;bottom:-12px;width:5px;height:14px;background:linear-gradient(180deg,#e9d5ff 0%,#d8b4fe 100%);border-radius:2px 2px 3px 3px;transform-origin:top;}
+.u-leg::after{content:'';position:absolute;bottom:0;left:-0.5px;width:6px;height:3px;background:#c084fc;border-radius:0 0 3px 3px;}
+.u-leg.fl{left:14px;animation:trot .4s ease-in-out infinite alternate;}
+.u-leg.fr{left:21px;animation:trot .4s ease-in-out infinite alternate-reverse;}
+.u-leg.bl{left:34px;animation:trot .4s ease-in-out infinite alternate-reverse;}
+.u-leg.br{left:40px;animation:trot .4s ease-in-out infinite alternate;}
+@keyframes trot{0%{transform:rotate(-16deg);}100%{transform:rotate(16deg);}}
+.u-sparkles{position:absolute;bottom:10px;left:-30px;width:30px;height:20px;}
+.u-sparkle{position:absolute;width:3px;height:3px;border-radius:50%;animation:sparkleTrail 1s ease-out infinite;}
+.u-sparkle:nth-child(1){background:#fde68a;top:2px;left:5px;animation-delay:0s;}
+.u-sparkle:nth-child(2){background:#c084fc;top:10px;left:15px;animation-delay:.3s;}
+.u-sparkle:nth-child(3){background:#60a5fa;top:5px;left:25px;animation-delay:.6s;}
+.u-sparkle:nth-child(4){background:#f472b6;top:14px;left:8px;animation-delay:.15s;}
+.u-sparkle:nth-child(5){background:#fbbf24;top:0;left:20px;animation-delay:.45s;}
+@keyframes sparkleTrail{0%{opacity:1;transform:scale(1);}50%{opacity:.6;transform:scale(1.5);}100%{opacity:0;transform:scale(0) translateY(-8px);}}
+.u-wing{position:absolute;top:-4px;left:18px;width:14px;height:12px;background:linear-gradient(135deg,rgba(192,132,252,0.2),rgba(129,140,248,0.15),rgba(96,165,250,0.1));border-radius:12px 12px 4px 8px;border:1px solid rgba(192,132,252,0.25);transform-origin:bottom right;animation:flutter .6s ease-in-out infinite alternate;z-index:0;}
+.u-wing::after{content:'';position:absolute;top:3px;left:-5px;width:10px;height:8px;background:linear-gradient(135deg,rgba(244,114,182,0.15),rgba(192,132,252,0.1));border-radius:10px 10px 2px 6px;border:1px solid rgba(244,114,182,0.2);transform-origin:bottom right;animation:flutter .6s ease-in-out infinite alternate-reverse;}
+@keyframes flutter{0%{transform:rotate(-5deg) scaleY(0.9);}100%{transform:rotate(15deg) scaleY(1.1);}}
+.rainbow-poop{position:absolute;bottom:20px;opacity:0;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.rainbow-poop.p1{left:25%;animation:poopDrop 20s linear infinite;}
+.rainbow-poop.p2{left:50%;animation:poopDrop 20s linear infinite 6.6s;}
+.rainbow-poop.p3{left:75%;animation:poopDrop 20s linear infinite 13.3s;}
+@keyframes poopDrop{0%,28%{opacity:0;transform:translateY(0) scale(.6);}30%{opacity:1;transform:translateY(0) scale(1) rotate(0deg);}32%{transform:translateY(-2px) scale(1.1) rotate(-5deg);}34%{transform:translateY(0) scale(1) rotate(0deg);}50%{opacity:1;transform:translateY(-2px) scale(1);}60%{opacity:0;transform:translateY(-10px) scale(.8);}100%{opacity:0;}}
+.rp-icon{font-size:18px;line-height:1;filter:drop-shadow(0 1px 2px rgba(0,0,0,0.15));}
+.rp-label{font-size:8px;font-weight:800;color:#7c3aed;letter-spacing:.5px;white-space:nowrap;font-family:'Plus Jakarta Sans',sans-serif;text-shadow:0 0 6px rgba(124,58,252,.4);animation:labelPulse 2s ease-in-out infinite;}
+@keyframes labelPulse{0%,100%{opacity:1;}50%{opacity:.7;}}
+.rainbow-trail{position:absolute;bottom:22px;height:6px;border-radius:3px;background:linear-gradient(90deg,#ef4444,#f97316,#eab308,#22c55e,#3b82f6,#8b5cf6);opacity:0;filter:blur(0.5px);}
+.rainbow-trail.t1{left:23%;animation:trail 20s linear infinite;}
+.rainbow-trail.t2{left:48%;animation:trail 20s linear infinite 6.6s;}
+.rainbow-trail.t3{left:73%;animation:trail 20s linear infinite 13.3s;}
+@keyframes trail{0%,28%{opacity:0;width:0;}30%{opacity:.6;width:0;}36%{opacity:.5;width:40px;}48%{opacity:0;width:60px;}100%{opacity:0;}}
+.flower{position:absolute;bottom:12px;width:6px;height:6px;border-radius:50%;animation:sway 3s ease-in-out infinite;}
+.flower::before{content:'';position:absolute;bottom:-6px;left:2.5px;width:1.5px;height:8px;background:#16a34a;}
+.flower.f1{left:8%;background:#f472b6;animation-delay:0s;}
+.flower.f2{left:22%;background:#fbbf24;animation-delay:.5s;}
+.flower.f3{left:38%;background:#60a5fa;animation-delay:1s;}
+.flower.f4{left:55%;background:#f472b6;animation-delay:1.5s;}
+.flower.f5{left:70%;background:#c084fc;animation-delay:2s;}
+.flower.f6{left:85%;background:#fbbf24;animation-delay:2.5s;}
+.flower.f7{left:95%;background:#60a5fa;animation-delay:.8s;}
+@keyframes sway{0%,100%{transform:rotate(-5deg);}50%{transform:rotate(5deg);}}
 </style>
 </head>
 <body>
@@ -407,22 +458,53 @@ loadAll();
   <div class="unicorn-walk">
     <div class="u-body">
       <div class="u-torso"></div>
-      <div class="u-head"><div class="u-eye"></div></div>
+      <div class="u-wing"></div>
+      <div class="u-head">
+        <div class="u-eye"></div>
+        <div class="u-eye2"></div>
+        <div class="u-snout"><div class="u-nostril"></div></div>
+        <div class="u-mouth"></div>
+      </div>
+      <div class="u-ear"></div>
       <div class="u-horn"></div>
-      <div class="u-mane"></div>
-      <div class="u-tail"></div>
+      <div class="u-mane">
+        <div class="u-mane-strand"></div>
+        <div class="u-mane-strand"></div>
+        <div class="u-mane-strand"></div>
+        <div class="u-mane-strand"></div>
+      </div>
+      <div class="u-tail">
+        <div class="u-tail-strand"></div>
+        <div class="u-tail-strand"></div>
+        <div class="u-tail-strand"></div>
+        <div class="u-tail-strand"></div>
+      </div>
       <div class="u-leg fl"></div>
       <div class="u-leg fr"></div>
       <div class="u-leg bl"></div>
       <div class="u-leg br"></div>
+      <div class="u-sparkles">
+        <div class="u-sparkle"></div>
+        <div class="u-sparkle"></div>
+        <div class="u-sparkle"></div>
+        <div class="u-sparkle"></div>
+        <div class="u-sparkle"></div>
+      </div>
     </div>
   </div>
-  <div class="rainbow-poop p1"><div class="rp-icon">🌈💩</div><div class="rp-label">Go Alyssa!</div></div>
-  <div class="rainbow-poop p2"><div class="rp-icon">🌈💩</div><div class="rp-label">Go Alyssa!</div></div>
-  <div class="rainbow-poop p3"><div class="rp-icon">🌈💩</div><div class="rp-label">Go Alyssa!</div></div>
+  <div class="rainbow-poop p1"><div class="rp-icon">&#127752;&#128169;</div><div class="rp-label">Go Alyssa!</div></div>
+  <div class="rainbow-poop p2"><div class="rp-icon">&#127752;&#128169;</div><div class="rp-label">Go Alyssa!</div></div>
+  <div class="rainbow-poop p3"><div class="rp-icon">&#127752;&#128169;</div><div class="rp-label">Go Alyssa!</div></div>
   <div class="rainbow-trail t1"></div>
   <div class="rainbow-trail t2"></div>
   <div class="rainbow-trail t3"></div>
+  <div class="flower f1"></div>
+  <div class="flower f2"></div>
+  <div class="flower f3"></div>
+  <div class="flower f4"></div>
+  <div class="flower f5"></div>
+  <div class="flower f6"></div>
+  <div class="flower f7"></div>
   <div class="grass"></div>
 </div>
 </body>
