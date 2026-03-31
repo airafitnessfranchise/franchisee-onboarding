@@ -116,88 +116,50 @@ input,select,textarea,button{font-family:inherit;}
 .notes-saved.show{opacity:1;}
 
 /* ── UNICORN ── */
-.unicorn-scene{position:fixed;bottom:0;left:0;right:0;height:100px;pointer-events:none;z-index:999;overflow:hidden;}
-.grass{position:absolute;bottom:0;left:0;right:0;height:20px;background:linear-gradient(0deg,#15803d 0%,#16a34a 30%,#22c55e 60%,#4ade80 100%);border-top:2px solid #14532d;}
-.grass::before{content:'';position:absolute;top:-6px;left:0;right:0;height:8px;background:repeating-linear-gradient(90deg,transparent 0px,transparent 6px,#22c55e 6px,#22c55e 8px,transparent 8px,transparent 14px);opacity:.6;}
-.grass::after{content:'';position:absolute;top:-10px;left:0;right:0;height:12px;background:repeating-linear-gradient(90deg,transparent 0px,transparent 20px,#4ade80 20px,#4ade80 22px,transparent 22px,transparent 40px);opacity:.3;}
-.unicorn-walk{position:absolute;bottom:18px;animation:unicornWalk 20s linear infinite;}
-@keyframes unicornWalk{0%{left:-100px;}100%{left:calc(100% + 100px);}}
-.u-body{position:relative;width:70px;height:50px;animation:bounce .5s ease-in-out infinite;}
-@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
-.u-torso{position:absolute;bottom:0;left:10px;width:42px;height:28px;background:linear-gradient(180deg,#faf5ff 0%,#f3e8ff 50%,#ede5ff 100%);border-radius:16px 14px 8px 10px;border:2px solid #d8b4fe;box-shadow:inset -4px -2px 6px rgba(192,132,252,0.15),0 2px 4px rgba(0,0,0,0.08);}
-.u-torso::after{content:'';position:absolute;bottom:3px;left:8px;width:16px;height:10px;background:rgba(255,255,255,0.5);border-radius:50%;}
-.u-head{position:absolute;top:-8px;right:-10px;width:26px;height:24px;background:linear-gradient(160deg,#fefcff 0%,#faf5ff 50%,#f3e8ff 100%);border-radius:13px 14px 8px 10px;border:2px solid #d8b4fe;box-shadow:0 2px 4px rgba(0,0,0,0.06);z-index:2;}
-.u-head::after{content:'';position:absolute;bottom:4px;right:2px;width:8px;height:5px;background:rgba(251,113,133,0.35);border-radius:50%;filter:blur(1px);}
-.u-snout{position:absolute;bottom:2px;right:-3px;width:10px;height:8px;background:#faf5ff;border-radius:0 6px 4px 0;border-right:1.5px solid #d8b4fe;border-bottom:1.5px solid #d8b4fe;border-top:1.5px solid #d8b4fe;}
-.u-nostril{position:absolute;bottom:3px;right:1px;width:2px;height:1.5px;background:#c4b5fd;border-radius:50%;}
-.u-mouth{position:absolute;bottom:1px;right:3px;width:4px;height:2px;border-bottom:1.5px solid #ddd6fe;border-radius:0 0 3px 3px;}
-.u-eye{position:absolute;top:7px;right:8px;width:6px;height:7px;background:#312e81;border-radius:50%;animation:blink 4s ease-in-out infinite;z-index:3;}
-.u-eye::before{content:'';position:absolute;top:1px;right:1px;width:2.5px;height:2.5px;background:#fff;border-radius:50%;}
-.u-eye::after{content:'';position:absolute;bottom:1px;left:1px;width:1.5px;height:1.5px;background:rgba(255,255,255,0.6);border-radius:50%;}
-@keyframes blink{0%,42%,46%,100%{transform:scaleY(1);}44%{transform:scaleY(0.1);}}
-.u-eye2{position:absolute;top:8px;right:16px;width:4px;height:5px;background:#312e81;border-radius:50%;animation:blink 4s ease-in-out infinite;z-index:1;}
-.u-eye2::before{content:'';position:absolute;top:1px;right:1px;width:1.5px;height:1.5px;background:#fff;border-radius:50%;}
-.u-ear{position:absolute;top:-4px;right:6px;width:7px;height:10px;background:#f3e8ff;border-radius:3px 5px 0 0;border:1.5px solid #d8b4fe;border-bottom:none;transform:rotate(8deg);z-index:1;}
-.u-ear::after{content:'';position:absolute;top:2px;left:2px;width:3px;height:5px;background:rgba(251,113,133,0.25);border-radius:2px 3px 0 0;}
-.u-horn{position:absolute;top:-18px;right:8px;width:4px;height:16px;background:linear-gradient(0deg,#fbbf24 0%,#f59e0b 30%,#fbbf24 50%,#fcd34d 70%,#fde68a 100%);border-radius:2px 2px 1px 1px;transform:rotate(6deg);z-index:4;box-shadow:0 0 6px rgba(251,191,36,0.4);}
-.u-horn::before{content:'';position:absolute;top:2px;left:0;width:4px;height:12px;background:repeating-linear-gradient(0deg,transparent 0px,transparent 2px,rgba(255,255,255,0.3) 2px,rgba(255,255,255,0.3) 3px);border-radius:2px;}
-.u-horn::after{content:'';position:absolute;top:-4px;left:-2px;width:3px;height:3px;background:#fde68a;border-radius:50%;box-shadow:6px 2px 0 0 rgba(253,230,138,0.6),-2px 6px 0 0 rgba(253,230,138,0.4);animation:sparkle 1.5s ease-in-out infinite;}
-@keyframes sparkle{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.3;transform:scale(0.5);}}
-.u-mane{position:absolute;top:-6px;right:14px;width:20px;height:20px;z-index:1;}
-.u-mane-strand{position:absolute;border-radius:50%;opacity:.75;}
-.u-mane-strand:nth-child(1){width:10px;height:10px;background:#c084fc;top:0;left:0;animation:maneFlow 1.2s ease-in-out infinite;}
-.u-mane-strand:nth-child(2){width:12px;height:8px;background:#818cf8;top:4px;left:-3px;animation:maneFlow 1.2s ease-in-out infinite .15s;}
-.u-mane-strand:nth-child(3){width:9px;height:9px;background:#60a5fa;top:8px;left:-1px;animation:maneFlow 1.2s ease-in-out infinite .3s;}
-.u-mane-strand:nth-child(4){width:8px;height:7px;background:#f472b6;top:2px;left:5px;animation:maneFlow 1.2s ease-in-out infinite .45s;}
-@keyframes maneFlow{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-2px,1px) scale(1.1);}}
-.u-tail{position:absolute;bottom:8px;left:-14px;width:22px;height:16px;z-index:0;}
-.u-tail-strand{position:absolute;border-radius:50%;opacity:.7;}
-.u-tail-strand:nth-child(1){width:14px;height:10px;background:#f472b6;bottom:0;right:0;animation:tailSwish .8s ease-in-out infinite alternate;}
-.u-tail-strand:nth-child(2){width:12px;height:8px;background:#c084fc;bottom:2px;right:-4px;animation:tailSwish .8s ease-in-out infinite alternate .1s;}
-.u-tail-strand:nth-child(3){width:10px;height:9px;background:#60a5fa;bottom:-1px;right:-7px;animation:tailSwish .8s ease-in-out infinite alternate .2s;}
-.u-tail-strand:nth-child(4){width:8px;height:6px;background:#818cf8;bottom:4px;right:-2px;animation:tailSwish .8s ease-in-out infinite alternate .3s;}
-@keyframes tailSwish{0%{transform:rotate(-15deg) translateX(0);}100%{transform:rotate(10deg) translateX(3px);}}
-.u-leg{position:absolute;bottom:-12px;width:5px;height:14px;background:linear-gradient(180deg,#e9d5ff 0%,#d8b4fe 100%);border-radius:2px 2px 3px 3px;transform-origin:top;}
-.u-leg::after{content:'';position:absolute;bottom:0;left:-0.5px;width:6px;height:3px;background:#c084fc;border-radius:0 0 3px 3px;}
-.u-leg.fl{left:14px;animation:trot .4s ease-in-out infinite alternate;}
-.u-leg.fr{left:21px;animation:trot .4s ease-in-out infinite alternate-reverse;}
-.u-leg.bl{left:34px;animation:trot .4s ease-in-out infinite alternate-reverse;}
-.u-leg.br{left:40px;animation:trot .4s ease-in-out infinite alternate;}
-@keyframes trot{0%{transform:rotate(-16deg);}100%{transform:rotate(16deg);}}
-.u-sparkles{position:absolute;bottom:10px;left:-30px;width:30px;height:20px;}
-.u-sparkle{position:absolute;width:3px;height:3px;border-radius:50%;animation:sparkleTrail 1s ease-out infinite;}
-.u-sparkle:nth-child(1){background:#fde68a;top:2px;left:5px;animation-delay:0s;}
-.u-sparkle:nth-child(2){background:#c084fc;top:10px;left:15px;animation-delay:.3s;}
-.u-sparkle:nth-child(3){background:#60a5fa;top:5px;left:25px;animation-delay:.6s;}
-.u-sparkle:nth-child(4){background:#f472b6;top:14px;left:8px;animation-delay:.15s;}
-.u-sparkle:nth-child(5){background:#fbbf24;top:0;left:20px;animation-delay:.45s;}
-@keyframes sparkleTrail{0%{opacity:1;transform:scale(1);}50%{opacity:.6;transform:scale(1.5);}100%{opacity:0;transform:scale(0) translateY(-8px);}}
-.u-wing{position:absolute;top:-4px;left:18px;width:14px;height:12px;background:linear-gradient(135deg,rgba(192,132,252,0.2),rgba(129,140,248,0.15),rgba(96,165,250,0.1));border-radius:12px 12px 4px 8px;border:1px solid rgba(192,132,252,0.25);transform-origin:bottom right;animation:flutter .6s ease-in-out infinite alternate;z-index:0;}
-.u-wing::after{content:'';position:absolute;top:3px;left:-5px;width:10px;height:8px;background:linear-gradient(135deg,rgba(244,114,182,0.15),rgba(192,132,252,0.1));border-radius:10px 10px 2px 6px;border:1px solid rgba(244,114,182,0.2);transform-origin:bottom right;animation:flutter .6s ease-in-out infinite alternate-reverse;}
-@keyframes flutter{0%{transform:rotate(-5deg) scaleY(0.9);}100%{transform:rotate(15deg) scaleY(1.1);}}
-.rainbow-poop{position:absolute;bottom:20px;opacity:0;display:flex;flex-direction:column;align-items:center;gap:2px;}
-.rainbow-poop.p1{left:25%;animation:poopDrop 20s linear infinite;}
-.rainbow-poop.p2{left:50%;animation:poopDrop 20s linear infinite 6.6s;}
-.rainbow-poop.p3{left:75%;animation:poopDrop 20s linear infinite 13.3s;}
-@keyframes poopDrop{0%,28%{opacity:0;transform:translateY(0) scale(.6);}30%{opacity:1;transform:translateY(0) scale(1) rotate(0deg);}32%{transform:translateY(-2px) scale(1.1) rotate(-5deg);}34%{transform:translateY(0) scale(1) rotate(0deg);}50%{opacity:1;transform:translateY(-2px) scale(1);}60%{opacity:0;transform:translateY(-10px) scale(.8);}100%{opacity:0;}}
-.rp-icon{font-size:18px;line-height:1;filter:drop-shadow(0 1px 2px rgba(0,0,0,0.15));}
-.rp-label{font-size:8px;font-weight:800;color:#7c3aed;letter-spacing:.5px;white-space:nowrap;font-family:'Plus Jakarta Sans',sans-serif;text-shadow:0 0 6px rgba(124,58,252,.4);animation:labelPulse 2s ease-in-out infinite;}
-@keyframes labelPulse{0%,100%{opacity:1;}50%{opacity:.7;}}
-.rainbow-trail{position:absolute;bottom:22px;height:6px;border-radius:3px;background:linear-gradient(90deg,#ef4444,#f97316,#eab308,#22c55e,#3b82f6,#8b5cf6);opacity:0;filter:blur(0.5px);}
-.rainbow-trail.t1{left:23%;animation:trail 20s linear infinite;}
-.rainbow-trail.t2{left:48%;animation:trail 20s linear infinite 6.6s;}
-.rainbow-trail.t3{left:73%;animation:trail 20s linear infinite 13.3s;}
-@keyframes trail{0%,28%{opacity:0;width:0;}30%{opacity:.6;width:0;}36%{opacity:.5;width:40px;}48%{opacity:0;width:60px;}100%{opacity:0;}}
-.flower{position:absolute;bottom:12px;width:6px;height:6px;border-radius:50%;animation:sway 3s ease-in-out infinite;}
-.flower::before{content:'';position:absolute;bottom:-6px;left:2.5px;width:1.5px;height:8px;background:#16a34a;}
-.flower.f1{left:8%;background:#f472b6;animation-delay:0s;}
-.flower.f2{left:22%;background:#fbbf24;animation-delay:.5s;}
-.flower.f3{left:38%;background:#60a5fa;animation-delay:1s;}
-.flower.f4{left:55%;background:#f472b6;animation-delay:1.5s;}
-.flower.f5{left:70%;background:#c084fc;animation-delay:2s;}
-.flower.f6{left:85%;background:#fbbf24;animation-delay:2.5s;}
-.flower.f7{left:95%;background:#60a5fa;animation-delay:.8s;}
-@keyframes sway{0%,100%{transform:rotate(-5deg);}50%{transform:rotate(5deg);}}
+.unicorn-scene{position:fixed;bottom:0;left:0;right:0;height:110px;pointer-events:none;z-index:999;overflow:hidden;}
+.grass-layer{position:absolute;bottom:0;left:0;right:0;}
+.grass-back{height:22px;background:linear-gradient(0deg,#15803d,#22c55e);border-radius:6px 6px 0 0;}
+.grass-front{position:absolute;bottom:0;left:0;right:0;height:16px;background:linear-gradient(0deg,#16a34a,#4ade80);}
+.unicorn-walk{position:absolute;bottom:16px;animation:unicornWalk 22s linear infinite;filter:drop-shadow(0 2px 3px rgba(0,0,0,0.1));}
+@keyframes unicornWalk{0%{left:-120px;}100%{left:calc(100% + 120px);}}
+.unicorn-svg{animation:unicornBounce .5s ease-in-out infinite;transform-origin:bottom center;}
+@keyframes unicornBounce{0%,100%{transform:translateY(0) rotate(0deg);}25%{transform:translateY(-4px) rotate(-0.5deg);}75%{transform:translateY(-2px) rotate(0.5deg);}}
+.sparkle-field{position:absolute;bottom:20px;left:-40px;width:50px;height:40px;}
+.sparkle-particle{position:absolute;border-radius:50%;animation:sparkFloat 1.2s ease-out infinite;}
+.sparkle-particle:nth-child(1){width:4px;height:4px;background:radial-gradient(circle,#fde68a,#fbbf24);top:5px;left:10px;animation-delay:0s;}
+.sparkle-particle:nth-child(2){width:3px;height:3px;background:radial-gradient(circle,#c4b5fd,#8b5cf6);top:15px;left:25px;animation-delay:.2s;}
+.sparkle-particle:nth-child(3){width:5px;height:5px;background:radial-gradient(circle,#fbcfe8,#ec4899);top:8px;left:40px;animation-delay:.4s;}
+.sparkle-particle:nth-child(4){width:3px;height:3px;background:radial-gradient(circle,#bfdbfe,#3b82f6);top:25px;left:15px;animation-delay:.6s;}
+.sparkle-particle:nth-child(5){width:4px;height:4px;background:radial-gradient(circle,#fde68a,#f59e0b);top:30px;left:35px;animation-delay:.8s;}
+.sparkle-particle:nth-child(6){width:2px;height:2px;background:radial-gradient(circle,#a5f3fc,#06b6d4);top:2px;left:30px;animation-delay:.3s;}
+@keyframes sparkFloat{0%{opacity:1;transform:scale(1) translateY(0);}40%{opacity:.8;transform:scale(1.4) translateY(-5px);}100%{opacity:0;transform:scale(0) translateY(-15px);}}
+.star-sparkle{position:absolute;animation:starTwinkle 2s ease-in-out infinite;}
+.star-sparkle::before,.star-sparkle::after{content:'';position:absolute;background:#fde68a;}
+.star-sparkle::before{width:2px;height:8px;left:3px;top:0;border-radius:1px;}
+.star-sparkle::after{width:8px;height:2px;left:0;top:3px;border-radius:1px;}
+.star-sparkle:nth-child(1){top:-15px;left:25px;animation-delay:0s;}
+.star-sparkle:nth-child(2){top:-8px;left:45px;animation-delay:.7s;transform:scale(.7);}
+.star-sparkle:nth-child(3){top:-20px;left:10px;animation-delay:1.4s;transform:scale(.5);}
+@keyframes starTwinkle{0%,100%{opacity:0;transform:scale(.3) rotate(0deg);}50%{opacity:1;transform:scale(1) rotate(45deg);}}
+.rainbow-poop{position:absolute;bottom:22px;opacity:0;display:flex;flex-direction:column;align-items:center;gap:3px;filter:drop-shadow(0 1px 2px rgba(0,0,0,0.12));}
+.rainbow-poop.p1{left:22%;animation:poopAppear 22s linear infinite;}
+.rainbow-poop.p2{left:48%;animation:poopAppear 22s linear infinite 7.3s;}
+.rainbow-poop.p3{left:74%;animation:poopAppear 22s linear infinite 14.6s;}
+@keyframes poopAppear{0%,28%{opacity:0;transform:translateY(0) scale(0);}30%{opacity:1;transform:translateY(0) scale(1.2);}32%{transform:translateY(-3px) scale(1) rotate(-8deg);}34%{transform:translateY(0) scale(1.05) rotate(4deg);}36%{transform:translateY(-1px) scale(1) rotate(0deg);}52%{opacity:1;transform:translateY(-2px) scale(1);}62%{opacity:0;transform:translateY(-12px) scale(.7);}100%{opacity:0;}}
+.rp-icon{font-size:20px;line-height:1;}
+.rp-label{font-size:9px;font-weight:800;background:linear-gradient(90deg,#7c3aed,#db2777);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.5px;white-space:nowrap;font-family:'Plus Jakarta Sans',sans-serif;}
+.rainbow-trail{position:absolute;bottom:24px;height:6px;border-radius:3px;background:linear-gradient(90deg,#ef4444,#f97316,#eab308,#22c55e,#3b82f6,#8b5cf6);opacity:0;filter:blur(0.3px);}
+.rainbow-trail.t1{left:20%;animation:trailFade 22s linear infinite;}
+.rainbow-trail.t2{left:46%;animation:trailFade 22s linear infinite 7.3s;}
+.rainbow-trail.t3{left:72%;animation:trailFade 22s linear infinite 14.6s;}
+@keyframes trailFade{0%,28%{opacity:0;width:0;}30%{opacity:.5;width:0;}37%{opacity:.4;width:50px;}50%{opacity:0;width:70px;}100%{opacity:0;}}
+.flower{position:absolute;bottom:14px;}
+.flower svg{animation:sway 3s ease-in-out infinite;}
+@keyframes sway{0%,100%{transform:rotate(-4deg);}50%{transform:rotate(4deg);}}
+.butterfly{position:absolute;animation:flyAround 12s ease-in-out infinite;}
+.butterfly svg{animation:wingFlap .3s ease-in-out infinite alternate;}
+@keyframes flyAround{0%{bottom:50px;left:10%;opacity:0;}5%{opacity:1;}25%{bottom:70px;left:30%;}50%{bottom:45px;left:55%;}75%{bottom:75px;left:75%;}95%{opacity:1;}100%{bottom:55px;left:95%;opacity:0;}}
+@keyframes wingFlap{0%{transform:scaleX(1);}100%{transform:scaleX(.3);}}
 </style>
 </head>
 <body>
@@ -456,41 +418,85 @@ loadAll();
 </script>
 <div class="unicorn-scene">
   <div class="unicorn-walk">
-    <div class="u-body">
-      <div class="u-torso"></div>
-      <div class="u-wing"></div>
-      <div class="u-head">
-        <div class="u-eye"></div>
-        <div class="u-eye2"></div>
-        <div class="u-snout"><div class="u-nostril"></div></div>
-        <div class="u-mouth"></div>
-      </div>
-      <div class="u-ear"></div>
-      <div class="u-horn"></div>
-      <div class="u-mane">
-        <div class="u-mane-strand"></div>
-        <div class="u-mane-strand"></div>
-        <div class="u-mane-strand"></div>
-        <div class="u-mane-strand"></div>
-      </div>
-      <div class="u-tail">
-        <div class="u-tail-strand"></div>
-        <div class="u-tail-strand"></div>
-        <div class="u-tail-strand"></div>
-        <div class="u-tail-strand"></div>
-      </div>
-      <div class="u-leg fl"></div>
-      <div class="u-leg fr"></div>
-      <div class="u-leg bl"></div>
-      <div class="u-leg br"></div>
-      <div class="u-sparkles">
-        <div class="u-sparkle"></div>
-        <div class="u-sparkle"></div>
-        <div class="u-sparkle"></div>
-        <div class="u-sparkle"></div>
-        <div class="u-sparkle"></div>
-      </div>
+    <div class="star-sparkle"></div>
+    <div class="star-sparkle"></div>
+    <div class="star-sparkle"></div>
+    <div class="sparkle-field">
+      <div class="sparkle-particle"></div>
+      <div class="sparkle-particle"></div>
+      <div class="sparkle-particle"></div>
+      <div class="sparkle-particle"></div>
+      <div class="sparkle-particle"></div>
+      <div class="sparkle-particle"></div>
     </div>
+    <svg class="unicorn-svg" width="90" height="80" viewBox="0 0 90 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="bodyGrad" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="#fefcff"/><stop offset="50%" stop-color="#f5f0ff"/><stop offset="100%" stop-color="#ede5ff"/></radialGradient>
+        <radialGradient id="headGrad" cx="55%" cy="35%" r="55%"><stop offset="0%" stop-color="#ffffff"/><stop offset="60%" stop-color="#faf5ff"/><stop offset="100%" stop-color="#f0e8ff"/></radialGradient>
+        <linearGradient id="hornGrad" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stop-color="#f59e0b"/><stop offset="40%" stop-color="#fbbf24"/><stop offset="70%" stop-color="#fcd34d"/><stop offset="100%" stop-color="#fef3c7"/></linearGradient>
+        <radialGradient id="hornGlow" cx="50%" cy="20%" r="80%"><stop offset="0%" stop-color="#fde68a" stop-opacity="0.6"/><stop offset="100%" stop-color="#fde68a" stop-opacity="0"/></radialGradient>
+        <radialGradient id="eyeGrad" cx="40%" cy="35%" r="50%"><stop offset="0%" stop-color="#4338ca"/><stop offset="100%" stop-color="#1e1b4b"/></radialGradient>
+        <linearGradient id="mane1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#c084fc"/><stop offset="100%" stop-color="#a855f7"/></linearGradient>
+        <linearGradient id="mane2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#6366f1"/></linearGradient>
+        <linearGradient id="mane3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
+        <linearGradient id="mane4" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f472b6"/><stop offset="100%" stop-color="#ec4899"/></linearGradient>
+        <linearGradient id="tail1" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f472b6"/><stop offset="100%" stop-color="#ec4899"/></linearGradient>
+        <linearGradient id="tail2" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c084fc"/><stop offset="100%" stop-color="#a855f7"/></linearGradient>
+        <linearGradient id="tail3" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
+        <linearGradient id="wingGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#c4b5fd" stop-opacity="0.3"/><stop offset="50%" stop-color="#a5b4fc" stop-opacity="0.2"/><stop offset="100%" stop-color="#93c5fd" stop-opacity="0.1"/></linearGradient>
+        <radialGradient id="blush" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fda4af" stop-opacity="0.5"/><stop offset="100%" stop-color="#fda4af" stop-opacity="0"/></radialGradient>
+        <linearGradient id="hoofGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#d8b4fe"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient>
+      </defs>
+      <g transform="translate(8,38)">
+        <ellipse cx="0" cy="5" rx="10" ry="5" fill="url(#tail3)" opacity=".7"><animateTransform attributeName="transform" type="rotate" values="-10 5 5;15 5 5;-10 5 5" dur="1s" repeatCount="indefinite"/></ellipse>
+        <ellipse cx="2" cy="2" rx="9" ry="5" fill="url(#tail2)" opacity=".75"><animateTransform attributeName="transform" type="rotate" values="-15 5 5;12 5 5;-15 5 5" dur="1.1s" repeatCount="indefinite"/></ellipse>
+        <ellipse cx="4" cy="0" rx="8" ry="4" fill="url(#tail1)" opacity=".8"><animateTransform attributeName="transform" type="rotate" values="-12 5 3;18 5 3;-12 5 3" dur=".9s" repeatCount="indefinite"/></ellipse>
+      </g>
+      <g transform="translate(28,52)"><animateTransform attributeName="transform" type="rotate" values="-12 30 52;12 30 52;-12 30 52" dur=".7s" repeatCount="indefinite"/><rect x="0" y="0" width="6" height="16" rx="3" fill="#e2d1f9"/><ellipse cx="3" cy="16" rx="4" ry="2.5" fill="url(#hoofGrad)"/></g>
+      <g transform="translate(38,52)"><animateTransform attributeName="transform" type="rotate" values="12 40 52;-12 40 52;12 40 52" dur=".7s" repeatCount="indefinite"/><rect x="0" y="0" width="6" height="16" rx="3" fill="#e2d1f9"/><ellipse cx="3" cy="16" rx="4" ry="2.5" fill="url(#hoofGrad)"/></g>
+      <ellipse cx="42" cy="45" rx="22" ry="16" fill="url(#bodyGrad)" stroke="#d8b4fe" stroke-width="1.5"/>
+      <ellipse cx="38" cy="52" rx="10" ry="5" fill="white" opacity=".35"/>
+      <g transform="translate(25,28)"><path d="M12 12 C8 2, 0 0, 2 8 C-2 4, -4 -2, 4 4 C0 -2, 6 -4, 8 2 Z" fill="url(#wingGrad)" stroke="#c4b5fd" stroke-width=".5" stroke-opacity=".3"><animateTransform attributeName="transform" type="rotate" values="-5 10 12;15 10 12;-5 10 12" dur=".7s" repeatCount="indefinite"/></path></g>
+      <g transform="translate(48,52)"><animateTransform attributeName="transform" type="rotate" values="10 50 52;-14 50 52;10 50 52" dur=".7s" repeatCount="indefinite"/><rect x="0" y="0" width="6" height="16" rx="3" fill="#ece0f9"/><ellipse cx="3" cy="16" rx="4" ry="2.5" fill="url(#hoofGrad)"/></g>
+      <g transform="translate(56,52)"><animateTransform attributeName="transform" type="rotate" values="-14 58 52;10 58 52;-14 58 52" dur=".7s" repeatCount="indefinite"/><rect x="0" y="0" width="6" height="16" rx="3" fill="#ece0f9"/><ellipse cx="3" cy="16" rx="4" ry="2.5" fill="url(#hoofGrad)"/></g>
+      <g transform="translate(52,18)">
+        <path d="M0 16 C-2 8, 2 0, 12 0 C22 0, 26 8, 24 16 C24 22, 18 26, 12 26 C6 26, 0 22, 0 16 Z" fill="url(#headGrad)" stroke="#d8b4fe" stroke-width="1.5"/>
+        <path d="M6 2 C4 -4, 6 -8, 8 -4 C10 -8, 12 -4, 10 2" fill="#f3e8ff" stroke="#d8b4fe" stroke-width="1"/>
+        <path d="M7 0 C6.5 -3, 7.5 -5, 8 -3 C8.5 -5, 9.5 -3, 9 0" fill="#fecdd3" opacity=".4"/>
+        <ellipse cx="20" cy="16" rx="7" ry="5" fill="#faf5ff" stroke="#e9d5ff" stroke-width="1"/>
+        <ellipse cx="22" cy="15" rx="1" ry=".8" fill="#c4b5fd" opacity=".6"/>
+        <path d="M18 18 Q20 20, 22 18" fill="none" stroke="#d8b4fe" stroke-width=".8" stroke-linecap="round"/>
+        <ellipse cx="21" cy="20" rx="4" ry="2.5" fill="url(#blush)"/>
+        <g transform="translate(14,9)">
+          <ellipse cx="0" cy="0" rx="4.5" ry="5" fill="white" stroke="#d8b4fe" stroke-width=".5"/>
+          <ellipse cx="1" cy="0" rx="3.2" ry="3.8" fill="url(#eyeGrad)"><animate attributeName="ry" values="3.8;0.3;3.8" dur="4s" repeatCount="indefinite" keyTimes="0;0.02;0.04" keySplines="0.4 0 0.2 1;0.4 0 0.2 1" calcMode="spline"/></ellipse>
+          <ellipse cx="1.5" cy="-.5" rx="1.5" ry="1.8" fill="#0f0a2a"/>
+          <circle cx="-.5" cy="-1.5" r="1.5" fill="white" opacity=".9"/>
+          <circle cx="2" cy="1" r=".8" fill="white" opacity=".6"/>
+        </g>
+        <g transform="translate(6,10)">
+          <ellipse cx="0" cy="0" rx="3" ry="3.5" fill="white" stroke="#d8b4fe" stroke-width=".5"/>
+          <ellipse cx=".5" cy="0" rx="2.2" ry="2.8" fill="url(#eyeGrad)"><animate attributeName="ry" values="2.8;0.2;2.8" dur="4s" repeatCount="indefinite" keyTimes="0;0.02;0.04" keySplines="0.4 0 0.2 1;0.4 0 0.2 1" calcMode="spline"/></ellipse>
+          <ellipse cx="1" cy="-.5" rx="1" ry="1.3" fill="#0f0a2a"/>
+          <circle cx="-.3" cy="-1" r="1" fill="white" opacity=".85"/>
+        </g>
+      </g>
+      <g transform="translate(48,10)">
+        <ellipse cx="2" cy="6" rx="6" ry="7" fill="url(#mane1)" opacity=".8"><animateTransform attributeName="transform" type="translate" values="0 0;-2 1;0 0" dur="1.4s" repeatCount="indefinite"/></ellipse>
+        <ellipse cx="-1" cy="12" rx="7" ry="6" fill="url(#mane2)" opacity=".75"><animateTransform attributeName="transform" type="translate" values="0 0;-3 1;0 0" dur="1.5s" repeatCount="indefinite"/></ellipse>
+        <ellipse cx="1" cy="18" rx="6" ry="5" fill="url(#mane3)" opacity=".7"><animateTransform attributeName="transform" type="translate" values="0 0;-2 2;0 0" dur="1.3s" repeatCount="indefinite"/></ellipse>
+        <ellipse cx="4" cy="9" rx="5" ry="5" fill="url(#mane4)" opacity=".65"><animateTransform attributeName="transform" type="translate" values="0 0;-1 1;0 0" dur="1.6s" repeatCount="indefinite"/></ellipse>
+      </g>
+      <g transform="translate(62,4)">
+        <ellipse cx="3" cy="4" rx="8" ry="10" fill="url(#hornGlow)"/>
+        <path d="M1 16 C0 10, 2 4, 3 0 C4 4, 6 10, 5 16 Z" fill="url(#hornGrad)" stroke="#f59e0b" stroke-width=".5"/>
+        <path d="M1.5 14 Q3 12.5, 4.5 14" fill="none" stroke="white" stroke-width=".5" opacity=".5"/>
+        <path d="M1.8 11 Q3 9.5, 4.2 11" fill="none" stroke="white" stroke-width=".5" opacity=".45"/>
+        <path d="M2.1 8 Q3 6.5, 3.9 8" fill="none" stroke="white" stroke-width=".5" opacity=".4"/>
+        <path d="M2.4 5 Q3 3.5, 3.6 5" fill="none" stroke="white" stroke-width=".4" opacity=".35"/>
+        <circle cx="3" cy="0" r="1.5" fill="#fef3c7" opacity=".8"><animate attributeName="r" values="1.5;2.5;1.5" dur="1.5s" repeatCount="indefinite"/><animate attributeName="opacity" values=".8;.3;.8" dur="1.5s" repeatCount="indefinite"/></circle>
+      </g>
+    </svg>
   </div>
   <div class="rainbow-poop p1"><div class="rp-icon">&#127752;&#128169;</div><div class="rp-label">Go Alyssa!</div></div>
   <div class="rainbow-poop p2"><div class="rp-icon">&#127752;&#128169;</div><div class="rp-label">Go Alyssa!</div></div>
@@ -498,14 +504,15 @@ loadAll();
   <div class="rainbow-trail t1"></div>
   <div class="rainbow-trail t2"></div>
   <div class="rainbow-trail t3"></div>
-  <div class="flower f1"></div>
-  <div class="flower f2"></div>
-  <div class="flower f3"></div>
-  <div class="flower f4"></div>
-  <div class="flower f5"></div>
-  <div class="flower f6"></div>
-  <div class="flower f7"></div>
-  <div class="grass"></div>
+  <div class="flower" style="left:5%"><svg width="10" height="18" viewBox="0 0 10 18"><line x1="5" y1="10" x2="5" y2="18" stroke="#16a34a" stroke-width="1.5"/><circle cx="5" cy="5" r="4" fill="#f472b6" opacity=".8"/><circle cx="5" cy="5" r="2" fill="#fbbf24"/></svg></div>
+  <div class="flower" style="left:18%"><svg width="10" height="16" viewBox="0 0 10 16"><line x1="5" y1="9" x2="5" y2="16" stroke="#16a34a" stroke-width="1.5"/><circle cx="5" cy="4.5" r="3.5" fill="#a78bfa" opacity=".8"/><circle cx="5" cy="4.5" r="1.8" fill="#fde68a"/></svg></div>
+  <div class="flower" style="left:35%"><svg width="10" height="20" viewBox="0 0 10 20"><line x1="5" y1="12" x2="5" y2="20" stroke="#16a34a" stroke-width="1.5"/><circle cx="5" cy="6" r="4.5" fill="#60a5fa" opacity=".7"/><circle cx="5" cy="6" r="2.2" fill="#fbbf24"/></svg></div>
+  <div class="flower" style="left:52%"><svg width="10" height="15" viewBox="0 0 10 15"><line x1="5" y1="8" x2="5" y2="15" stroke="#16a34a" stroke-width="1.5"/><circle cx="5" cy="4" r="3" fill="#fb923c" opacity=".8"/><circle cx="5" cy="4" r="1.5" fill="#fef3c7"/></svg></div>
+  <div class="flower" style="left:68%"><svg width="10" height="17" viewBox="0 0 10 17"><line x1="5" y1="9" x2="5" y2="17" stroke="#16a34a" stroke-width="1.5"/><circle cx="5" cy="4.5" r="3.8" fill="#f472b6" opacity=".75"/><circle cx="5" cy="4.5" r="1.8" fill="#fde68a"/></svg></div>
+  <div class="flower" style="left:82%"><svg width="10" height="14" viewBox="0 0 10 14"><line x1="5" y1="8" x2="5" y2="14" stroke="#16a34a" stroke-width="1.5"/><circle cx="5" cy="4" r="3.2" fill="#c084fc" opacity=".8"/><circle cx="5" cy="4" r="1.5" fill="#fbbf24"/></svg></div>
+  <div class="flower" style="left:93%"><svg width="10" height="16" viewBox="0 0 10 16"><line x1="5" y1="9" x2="5" y2="16" stroke="#16a34a" stroke-width="1.5"/><circle cx="5" cy="5" r="3.5" fill="#60a5fa" opacity=".7"/><circle cx="5" cy="5" r="1.8" fill="#fde68a"/></svg></div>
+  <div class="butterfly"><svg width="14" height="10" viewBox="0 0 14 10"><ellipse cx="4" cy="4" rx="3.5" ry="4" fill="#c084fc" opacity=".6"/><ellipse cx="10" cy="4" rx="3.5" ry="4" fill="#f472b6" opacity=".6"/><ellipse cx="4" cy="5" rx="2" ry="2.5" fill="#818cf8" opacity=".4"/><ellipse cx="10" cy="5" rx="2" ry="2.5" fill="#fb7185" opacity=".4"/><line x1="7" y1="2" x2="7" y2="8" stroke="#6b7280" stroke-width=".8"/></svg></div>
+  <div class="grass-layer"><div class="grass-back"></div><div class="grass-front"></div></div>
 </div>
 </body>
 </html>
