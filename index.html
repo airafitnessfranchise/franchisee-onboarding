@@ -106,6 +106,14 @@ input,select,textarea,button{font-family:inherit;}
 .se-move{display:flex;flex-direction:column;gap:1px;color:var(--muted2);cursor:grab;padding:0 2px;}
 .se-move span{display:block;width:12px;height:2px;background:var(--muted2);border-radius:1px;}
 
+/* FRANCHISEE CARD DRAG */
+.tracker.dragging{opacity:.4;}
+.tracker.drag-over{box-shadow:0 0 0 2px var(--blue),var(--shadow-lg);}
+.tracker-drag{display:flex;flex-direction:column;gap:2px;cursor:grab;padding:4px 6px;color:var(--muted2);border-radius:4px;transition:all .15s;user-select:none;}
+.tracker-drag:hover{color:var(--blue);background:var(--bg);}
+.tracker-drag:active{cursor:grabbing;}
+.tracker-drag span{display:block;width:14px;height:2px;background:currentColor;border-radius:1px;}
+
 /* NOTES */
 .notes-section{padding:8px 14px 14px;border-top:1px solid var(--border-light);}
 .notes-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:6px;}
@@ -190,7 +198,7 @@ let stepCompletions = {};
 async function loadAll() {
   const [stepsRes, franchiseesRes, completionsRes] = await Promise.all([
     sb.from('checklist_steps').select('*').order('sort_order'),
-    sb.from('franchisees').select('*').order('created_at'),
+    sb.from('franchisees').select('*').order('sort_order', {ascending: true, nullsFirst: false}).order('created_at'),
     sb.from('franchisee_steps').select('*')
   ]);
   steps = stepsRes.data || [];
@@ -222,7 +230,7 @@ function pct(fid) {
 function render() {
   if (document.activeElement && document.activeElement.classList.contains('notes-box')) return;
   const g = document.getElementById('grid');
-  g.innerHTML = franchisees.map(f => {
+  g.innerHTML = franchisees.map((f, fIdx) => {
     const p = pct(f.id);
     const comp = stepCompletions[f.id] || {};
     const doneCount = steps.filter(s => comp[s.id]).length;
@@ -235,10 +243,13 @@ function render() {
         ${s.required ? '<span class="step-req">REQ</span>' : ''}
       </div>`;
     }).join('');
-    return `<div class="tracker">
+    return `<div class="tracker" data-fidx="${fIdx}" ondragover="frDO(event)" ondragleave="frDL(event)" ondrop="frDD(event,${fIdx})" ondragend="frDE(event)">
       <div class="tracker-head">
         <div class="tracker-info"><h3>${f.name}</h3><p>${f.location}</p></div>
-        <div class="tracker-pct">${p}%</div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="tracker-pct">${p}%</div>
+          <div class="tracker-drag" draggable="true" ondragstart="frDS(event,${fIdx})" title="Drag to reorder"><span></span><span></span><span></span></div>
+        </div>
       </div>
       <div class="tracker-bar"><div class="tracker-fill" style="width:${p}%"></div></div>
       <div class="steps">${stepsHtml}</div>
@@ -278,7 +289,8 @@ async function doAdd() {
   const loc = document.getElementById('a-loc').value.trim();
   if (!name || !loc) { alert('Name and location required.'); return; }
   document.getElementById('addBtn').textContent = 'Adding...';
-  const { data, error } = await sb.from('franchisees').insert({ name, location: loc }).select().single();
+  const maxOrder = franchisees.length ? Math.max(...franchisees.map(x => x.sort_order || 0)) : 0;
+  const { data, error } = await sb.from('franchisees').insert({ name, location: loc, sort_order: maxOrder + 10 }).select().single();
   if (error) { alert('Error: ' + error.message); document.getElementById('addBtn').textContent = 'Add'; return; }
   // Create step rows for new franchisee
   const stepRows = steps.map(s => ({ franchisee_id: data.id, step_id: s.id, completed: false }));
@@ -330,6 +342,46 @@ async function seDD(e,ti){
   _dragIdx = null;
   await loadAll();
   renderEditor();
+}
+
+// ── FRANCHISEE DRAG-TO-REORDER ──
+var _frDragIdx = null;
+function frDS(e,i){
+  _frDragIdx = i;
+  var card = e.target.closest('.tracker');
+  if(card) card.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', String(i));
+}
+function frDO(e){
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  var card = e.target.closest('.tracker');
+  if(card && !card.classList.contains('dragging')) card.classList.add('drag-over');
+}
+function frDL(e){
+  var card = e.target.closest('.tracker');
+  if(card) card.classList.remove('drag-over');
+}
+function frDE(e){
+  document.querySelectorAll('.tracker').forEach(function(c){ c.classList.remove('dragging','drag-over'); });
+  _frDragIdx = null;
+}
+async function frDD(e,ti){
+  e.preventDefault();
+  document.querySelectorAll('.tracker').forEach(function(c){ c.classList.remove('dragging','drag-over'); });
+  if(_frDragIdx===null || _frDragIdx===ti) return;
+  var moved = franchisees.splice(_frDragIdx,1)[0];
+  franchisees.splice(ti,0,moved);
+  // Renumber every franchisee in steps of 10 (gives room for future inserts)
+  var updates = franchisees.map(function(f,i){
+    f.sort_order = (i+1)*10;
+    return sb.from('franchisees').update({sort_order:(i+1)*10}).eq('id',f.id);
+  });
+  _frDragIdx = null;
+  // Re-render immediately for snappy UX, then persist
+  render();
+  await Promise.all(updates);
 }
 
 async function updateStepLabel(sid, label) {
