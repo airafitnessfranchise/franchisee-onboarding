@@ -1,50 +1,36 @@
-# Onboarding tracker security work — September 17, 2026
+# Protected onboarding tracker — September 17, 2026
 
-The owner confirmed this tracker is still used and requested protected sign-in.
-Do not retire it or remove its current data access without a coordinated cutover.
+The owner approved activation for Mike Bell and Alyssa Kathan only. The tracker
+now lives under **Super Admin → Franchisee Onboarding** in Aira Admin:
+https://aira-admin-three.vercel.app/franchisee-onboarding
 
-The current page has no sign-in. Its three Supabase tables grant anonymous and
-authenticated roles access, with permissive public ALL policies. This remains
-an urgent open finding (F02); safe HTML rendering alone does not resolve it.
+This repository is a fixed redirect and fallback link. It contains no Supabase
+client, database key, script, or privileged sign-in. Existing Aira staff login
+is required at the destination. Other staff or owner roles gain no implicit
+access; the server checks an exact two-account allowlist on every operation.
+Role-preview mode is denied; return to the real owner view before opening it.
 
-The stored-text fix escapes names, locations, notes and checklist labels in
-HTML text, textarea contents and input attributes. PostgreSQL schema verification
-confirmed the identifiers used in inline handlers are UUID columns. The tests
-use synthetic strings and the actual rendering functions without database,
-network, login, or production writes. Run `node --test test/*.test.cjs`.
+## Live cutover verification
 
-Before sign-in rollout:
+- The three onboarding tables no longer grant PUBLIC, anonymous, or ordinary
+  authenticated users read/write access. Anonymous REST probes returned 401.
+- The restricted server role has only the required four CRUD privileges, with
+  verified TLS through the IPv4-compatible session pooler. It cannot bypass RLS,
+  read Auth, create objects, truncate tables, or become an owner/service role.
+- The existing independent backup reader remains read-only. A fresh export
+  after restriction succeeded and its archive catalog includes all three tables.
+- The real owner browser session loaded the tracker, created a clearly labeled
+  temporary checklist, saved a note and completed step, reloaded both changes,
+  and removed the temporary checklist through its confirmation dialog.
+- All original row counts and hashes match the checkpoint: 4 franchisees,
+  21 steps, and 81 completion records. Alyssa's active identity and allowlist
+  entry were verified; her separate interactive sign-in remains unobserved.
 
-1. Confirm which owner/staff accounts may view and edit all checklists; do not
-   automatically give every signed-in gym member or staff account access.
-2. Prefer existing verified Aira staff identity and an explicit server-enforced
-   authorization list. Do not rely on hidden UI, a public key, user-editable
-   metadata, or a password embedded in this page.
-3. Choose a protected first-party app origin for privileged sign-in. GitHub Pages
-   project paths under the same account share an origin; a separate repository
-   path is not isolation for browser-stored tokens.
-4. Test permitted read/edit/reorder/add/remove operations and denied anonymous,
-   unapproved, expired-session, and cross-scope requests offline. Preserve drafts
-   and show save failures rather than pretending an optimistic change was saved.
-5. Prepare the exact permission restriction and rollback. Obtain owner approval
-   for the combined production credential/access/policy cutover after testing.
-6. Verify new sign-in and normal checklist usage, then confirm the old public
-   Data API no longer reads or writes the three tables. Preserve backups.
+The exact operation and recovery procedure live in
+`aira-api/docs/franchisee-onboarding-security.md`. Never restore the former
+anonymous policies as a page rollback. Disable the tracker feature if needed
+while preserving restricted access and independent backups. Historical access
+review remains a separate follow-up; closing public access cannot establish
+whether earlier data was viewed or copied.
 
-No account invitations, passwords, provider auth settings, or database grants
-have been changed by this source patch.
-
-## Protected bookmark prepared September 17
-
-The owner selected Mike Bell and Alyssa Kathan and requested the tracker under
-Super Admin in Aira Admin. This branch replaces the static page with a fixed
-redirect and fallback link to `/franchisee-onboarding` in Aira Admin. It contains
-no Supabase client, database key, script or privileged sign-in.
-
-Do not integrate this branch into `main` until the separately reviewed database
-restriction, restricted API credential and two-account allowlist cutover is
-approved and the protected dashboard is ready. A redirect alone does not fix
-public database permissions. The API runbook is
-`aira-api/docs/franchisee-onboarding-security.md`. Keep the old working page
-available until that coordinated cutover; do not reopen public policies as a
-rollback after the protected cutover.
+Run the static bookmark checks with `node --test test/*.test.cjs`.
