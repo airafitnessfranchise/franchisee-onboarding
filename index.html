@@ -194,6 +194,13 @@ let steps = [];
 let franchisees = [];
 let stepCompletions = {};
 
+// Stored text must never become HTML, textarea markup, or input attributes.
+function escapeHtml(value) {
+  return String(value == null ? '' : value).replace(/[&<>"']/g, function(c) {
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+
 // ── LOAD DATA ──
 async function loadAll() {
   const [stepsRes, franchiseesRes, completionsRes] = await Promise.all([
@@ -239,13 +246,13 @@ function render() {
       return `<div class="step ${done ? 'done' : ''}" onclick="toggleStep('${f.id}','${s.id}',${!done})">
         <span class="step-num">${i + 1}</span>
         <div class="step-check">${done ? '✓' : ''}</div>
-        <span class="step-text">${s.label}</span>
+        <span class="step-text">${escapeHtml(s.label)}</span>
         ${s.required ? '<span class="step-req">REQ</span>' : ''}
       </div>`;
     }).join('');
     return `<div class="tracker" data-fidx="${fIdx}" ondragover="frDO(event)" ondragleave="frDL(event)" ondrop="frDD(event,${fIdx})" ondragend="frDE(event)">
       <div class="tracker-head">
-        <div class="tracker-info"><h3>${f.name}</h3><p>${f.location}</p></div>
+        <div class="tracker-info"><h3>${escapeHtml(f.name)}</h3><p>${escapeHtml(f.location)}</p></div>
         <div style="display:flex;align-items:center;gap:8px;">
           <div class="tracker-pct">${p}%</div>
           <div class="tracker-drag" draggable="true" ondragstart="frDS(event,${fIdx})" title="Drag to reorder"><span></span><span></span><span></span></div>
@@ -255,7 +262,7 @@ function render() {
       <div class="steps">${stepsHtml}</div>
       <div class="notes-section">
         <div style="display:flex;align-items:center;"><span class="notes-label">Notes</span><span class="notes-saved" id="ns-${f.id}">Saved</span></div>
-        <textarea class="notes-box" id="nb-${f.id}" placeholder="Add notes..." onblur="saveNotes('${f.id}',this.value)">${f.notes||''}</textarea>
+        <textarea class="notes-box" id="nb-${f.id}" placeholder="Add notes..." onblur="saveNotes('${f.id}',this.value)">${escapeHtml(f.notes)}</textarea>
       </div>
       <div class="tracker-foot">
         <span>${doneCount} of ${steps.length} complete</span>
@@ -320,7 +327,7 @@ function renderEditor() {
   document.getElementById('stepsEditor').innerHTML = steps.map((s, i) => `
     <div class="se-row" draggable="true" data-idx="${i}" ondragstart="seDS(event,${i})" ondragover="seDO(event)" ondragleave="seDL(event)" ondrop="seDD(event,${i})" ondragend="seDE(event)">
       <div class="se-move"><span></span><span></span><span></span></div>
-      <input value="${s.label}" onchange="updateStepLabel('${s.id}',this.value)">
+      <input value="${escapeHtml(s.label)}" onchange="updateStepLabel('${s.id}',this.value)">
       <span class="se-req ${s.required ? 'active' : ''}" onclick="toggleReq('${s.id}',${!s.required})">${s.required ? 'REQ' : 'opt'}</span>
       <span class="se-del" onclick="deleteStep('${s.id}')">x</span>
     </div>
