@@ -33,3 +33,18 @@ Before sign-in rollout:
 
 No account invitations, passwords, provider auth settings, or database grants
 have been changed by this source patch.
+
+## Protected bookmark prepared September 17
+
+The owner selected Mike Bell and Alyssa Kathan and requested the tracker under
+Super Admin in Aira Admin. This branch replaces the static page with a fixed
+redirect and fallback link to `/franchisee-onboarding` in Aira Admin. It contains
+no Supabase client, database key, script or privileged sign-in.
+
+Do not integrate this branch into `main` until the separately reviewed database
+restriction, restricted API credential and two-account allowlist cutover is
+approved and the protected dashboard is ready. A redirect alone does not fix
+public database permissions. The API runbook is
+`aira-api/docs/franchisee-onboarding-security.md`. Keep the old working page
+available until that coordinated cutover; do not reopen public policies as a
+rollback after the protected cutover.
